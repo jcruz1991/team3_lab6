@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include "LogList.h"
 using namespace std;
 
 const string correct[] = { "40000810", "40000818", "40000C18", "40000C20", "4000101C" };
