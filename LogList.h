@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-
+#include <iomanip>
 using namespace std;
 
 #pragma once
@@ -21,6 +21,7 @@ public:
 	void insertNode(double); // Will add in the body in the 2nd example
 	void deleteNode(double); // Will add in body in the 3rd example
 	void displayList();
+	void displayData();
 };
 
 
@@ -81,4 +82,25 @@ void LogList::displayList(void)
 		nodePtr = nodePtr->next;
 	}
 }
-
+void LogList::displayData()
+{
+	string firstNum = "40000810";
+	string secondNum = "40000C18";
+	ListNode *nodePtr;
+	nodePtr = head;
+	while(nodePtr != NULL)
+	{
+		string newAddress = nodePtr->Address;
+		if(newAddress.compare(firstNum) == 0 || newAddress.compare(secondNum) == 0)
+		{
+			string newData = nodePtr->Data;
+			stringstream stringData;
+			stringData << newData;
+			int convertData;
+			stringData >> hex >> convertData;
+			cout << newAddress << " " << convertData << " " << convertData/2 << endl;
+		}
+		nodePtr = nodePtr->next;
+	}
+}
+}
