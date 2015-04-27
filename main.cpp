@@ -25,14 +25,13 @@ int main()
 	{
 		inFile >> sample >> bgl >> relTime >> AbsTime >> Transfer >> XAM
 			>> Address >> Data >> Size >> Cycle >> Status >> Iack >> Fail >> IRQ;
-
+		j++;
 		for (int i = 0; i < 5; i++)
 		{
 			if (Address == correct[i])
 			{
 				theLog.appendNode(sample, bgl, relTime, AbsTime, Transfer, XAM, Address, Data, Size, Cycle, Status, Iack, Fail, IRQ);
 				line_num[j] = count;
-				j++;
 			}
 		}
 		count++;
