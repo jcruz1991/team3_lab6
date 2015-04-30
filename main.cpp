@@ -7,11 +7,12 @@
 #include <sstream>
 #include <string>
 #include <iomanip>
+#include <cmath>
 using namespace std;
 
 int calculateData(string data);
 const char* hex_char_to_bin(char c);
-string hex_str_to_bin_str(const std::string& hex);
+string hex_str_to_bin_str(const string& hex);
 void getWord1(vector<string> defaultWord, vector<int> line);
 void getWord2(vector<string> defaultWord, vector<int> line);
 int readBinary(string binaryNum);
@@ -76,6 +77,47 @@ int main()
 
 
 	return 0;
+}
+
+int calculateData(string data)
+{
+    stringstream stringData;
+    stringData << data;
+    int total;
+    stringData >> hex >> total; 
+
+    return total;
+}
+
+const char* hex_char_to_bin(char c)
+{
+    switch (toupper(c))
+    {
+    case '0': return "0000";
+    case '1': return "0001";
+    case '2': return "0010";
+    case '3': return "0011";
+    case '4': return "0100";
+    case '5': return "0101";
+    case '6': return "0110";
+    case '7': return "0111";
+    case '8': return "1000";
+    case '9': return "1001";
+    case 'A': return "1010";
+    case 'B': return "1011";
+    case 'C': return "1100";
+    case 'D': return "1101";
+    case 'E': return "1110";
+    case 'F': return "1111";
+    }
+}
+
+string hex_str_to_bin_str(const std::string& hex)
+{
+    std::string bin;
+    for (unsigned i = 0; i != hex.length(); ++i)
+        bin += hex_char_to_bin(hex[i]);
+    return bin;
 }
 
 
@@ -377,3 +419,59 @@ void getWord2(vector<string> defaultWord, vector<int> line)
 
 	} while (i >= 0);
 }	
+int readBinary(string binaryNum)
+{
+    long dec = 0;
+    
+    int x = 0;
+    int base = pow(2, binaryNum.length() - 1);
+
+
+    while (binaryNum[x])
+    {
+        char currBit = binaryNum[x];
+        int binNum = currBit - '0';
+        dec += binNum * base;
+        base /= 2;
+        x++;
+    }
+    return dec;
+}        
+
+double converTime(string time)
+{
+    bool nanoFlag = false;
+    bool microFlag = false;
+    bool milliFlag = false;
+    double finalTime = 0;
+
+    for (int i = 0; i < time.length(); i++)
+    {
+        if (time[i] == 'n')
+            nanoFlag = true;
+        if (time[i] == 'u')
+            microFlag = true;
+        if (time[i] == 'm')
+            milliFlag = true;
+    }
+
+    string justTime = time.substr(0, time.length() - 2);
+    double theTime = stod(justTime);
+
+    if (nanoFlag)
+    {
+        finalTime = theTime * pow(10, -9);
+    }
+    if (microFlag)
+    {
+        finalTime = theTime * pow(10, -6);
+    }
+    if (milliFlag)
+    {
+        finalTime = theTime * pow(10, -3);
+    }
+
+
+    return finalTime;
+}
+
