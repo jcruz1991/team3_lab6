@@ -227,4 +227,77 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 
 		i++;
 	}
+void getWord2(vector<string> defaultWord, vector<int> line)
+{
+	int i = defaultWord.size();
+	do
+	{
+		if (i == 0)
+		{
+			string word0 = defaultWord[i].substr(1, 2);
+			int hex0 = readBinary(word0);
+
+			cout << "Line " << line[i] << ": Word " << i << ": Rec_Ctrl = ";
+			if (hex0 == 0)
+				cout << hex0 << " (no recording)" << endl;
+			else if (hex0 == 2)
+				cout << hex << " (no processing)" << endl;
+			else if (hex0 == 3)
+				cout << hex0 << " (processing & recording)" << endl;
+			else
+				cout << hex0 << " (unknown) " << endl;
+		}
+		else if (i == 1)
+		{
+			string word1 = defaultWord[i].substr(0, 3);
+			int hex1 = readBinary(word1);
+			cout << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";
+			if (hex1 == 4)
+				cout << hex1 << " (Type A) " << endl;
+			else if (hex1 == 5)
+				cout << hex1 << " (Type B) " << endl;
+			else if (hex1 == 6)
+				cout << hex1 << " (Type C) " << endl;
+			else
+				cout << hex1 << endl;
+		}
+		else if (i == 4)
+		{
+			string word4 = defaultWord[i].substr(15, 1);
+			int hex4 = readBinary(word4);
+			cout << "Line " << line[i] << ": Word " << i << ": Rec_Raw = ";
+			if (hex4 == 0)
+				cout << hex4 << " (disable) " << endl;
+			else if (hex4 == 1)
+				cout << hex4 << " (enable) " << endl;
+			else
+				cout << hex4 << endl;
+		}
+
+		else if (i == 5)
+		{
+			string word5 = defaultWord[i].substr(9, 7);
+			int hex5 = readBinary(word5);
+			cout << "Line " << line[i] << ": Word " << i << " : Cmd_ID = " << hex5 << endl;
+		}
+		else if (i == 10)
+		{
+			string word10 = defaultWord[i].substr(0, 5);
+			int hex10 = readBinary(word10);
+			cout << "Line " << line[i] << ": Word " << i << " : Num_Responses = " << hex10 << endl;
+		}
+
+		else if (i == 15)
+		{
+			string word15 = defaultWord[i].substr(13, 1);
+			int hex15 = readBinary(word15);
+			cout << "Line " << line[i] << ": Word " << i << ": Reset_Enable = ";
+			if (hex15 == 0)
+				cout << hex15 << " (disable) " << endl;
+			else if (hex15 == 1)
+				cout << hex15 << " (enable) " << endl;
+			else
+				cout << hex15 << endl;
+		}
+
 }
