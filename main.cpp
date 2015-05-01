@@ -316,7 +316,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			string word4 = defaultWord[i].substr(15, 1);
 			int hex4 = readBinary(word4);
 
-			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Raw =";
+			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Raw = ";
 
 			if (hex4 == 0)
 				outFile << hex4 << " (disable) " << endl;
@@ -333,7 +333,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			string word5 = defaultWord[i].substr(9, 7);
 			int hex5 = readBinary(word5);
 
-			outFile << "Line " << line[i] << ": Word " << i << " : Cmd_ID =" << hex5 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_ID = " << hex5 << endl;
 		}
 
 		else if (i == 10)
@@ -341,7 +341,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			string word10 = defaultWord[i].substr(0, 5);
 			int hex10 = readBinary(word10);
 
-			outFile << "Line " << line[i] << ": Word " << i << " : Num_Responses =" << hex10 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << ": Num_Responses = " << hex10 << endl;
 		}
 
 		else if (i == 15)
@@ -381,7 +381,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			string word32 = defaultWord[i].substr(1, 15);
 			int hex32 = readBinary(word32);
 
-			outFile << "Line " << line[i] << ": Word " << i << " : Num_Samples = " << hex32 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << ": Num_Samples = " << hex32 << endl;
 		}
 
 		else if (i == 37)
@@ -440,7 +440,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			string word41 = defaultWord[i].substr(1, 7);
 			int hex41 = readBinary(word41);
 
-			outFile << "Line " << line[i] << ": Word " << i << " : Code =" << hex41 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << ": Code = " << hex41 << endl;
 		}
 
 		i++;
@@ -515,7 +515,7 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			string word5 = defaultWord[i].substr(9, 7);
 			int hex5 = readBinary(word5);
 
-			outFile << "Line " << line[i] << ": Word " << i << " : Cmd_ID = " << hex5 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_ID = " << hex5 << endl;
 		}
 
 		else if (i == 10)
@@ -523,7 +523,7 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			string word10 = defaultWord[i].substr(0, 5);
 			int hex10 = readBinary(word10);
 
-			outFile << "Line " << line[i] << ": Word " << i << " : Num_Responses = " << hex10 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << ": Num_Responses = " << hex10 << endl;
 		}
 
 		else if (i == 15)
@@ -565,7 +565,7 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			string word32 = defaultWord[i].substr(1, 15);
 			int hex32 = readBinary(word32);
 
-			outFile << "Line " << line[i] << ": Word " << i << " : Num_Samples = " << hex32 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << ": Num_Samples = " << hex32 << endl;
 		}
 
 		else if (i == 37)
@@ -624,7 +624,7 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			string word41 = defaultWord[i].substr(1, 7);
 			int hex41 = readBinary(word41);
 
-			outFile << "Line " << line[i] << ": Word " << i << " : Code =" << hex41 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << ": Code = " << hex41 << endl;
 		}
 
 
