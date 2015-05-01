@@ -13,8 +13,8 @@ using namespace std;
 int calculateData(string data);
 const char* hex_char_to_bin(char c);
 string hex_str_to_bin_str(const string& hex);
-void getWord1(vector<string> defaultWord, vector<int> line);
-void getWord2(vector<string> defaultWord, vector<int> line);
+void getWord1(vector<string> defaultWord, vector<int> line, ofstream&);
+void getWord2(vector<string> defaultWord, vector<int> line, ofstream&);
 int readBinary(string binaryNum);
 double converTime(string time);
 
@@ -35,6 +35,7 @@ int main()
 	getData first;
 	string sample, bgl, relTime, AbsTime, Transfer, am, address, data, size, cycle, status, iack, Fail, irq;
 	ifstream inFile("test_data.log");
+	ofstream outFile("output.log");
 
 	if (inFile.is_open())
 	{
@@ -68,16 +69,16 @@ int main()
 	}
 
 	else
-		cout << "Cannot open file" << endl;
+		outFile << "Cannot open file" << endl;
 
 	inFile.close();
 
 
 	//for(unsigned i = 0; i < vAddress.size(); ++i)
-	//	cout << vAddress[i] << " ";
-	//cout << endl;
+	//	outFile << vAddress[i] << " ";
+	//outFile << endl;
 	//for(unsigned i = 0; i < vData.size(); ++i)
-	//	cout << vData[i] << " ";
+	//	outFile << vData[i] << " ";
 
 	string firstNum = "40000810";
 	string secondNum = "40000C18";
@@ -97,7 +98,7 @@ int main()
 		{
 			string con = vData[i];
 			calData = calculateData(con);
-			cout << endl;
+			outFile << endl;
 			int word = calData;
 			if (word == 0)
 			{
@@ -107,21 +108,21 @@ int main()
 					if (vCycle[i] == "Wr")
 					{
 						tWSD += converTime(vRelTime[i]);
-						cout << "Line " << std::dec << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
+						outFile << "Line " << std::dec << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
 					}
 					else
 					{
 
-						cout << "Line " << std::dec << i + 1 << ": " << "Read S-to-D command: " << word << " words" << endl;
+						outFile << "Line " << std::dec << i + 1 << ": " << "Read S-to-D command: " << word << " words" << endl;
 					}
 				}
 				else
 				{
 
 					if (vCycle[i] == "Wr")
-						cout << "Line " << std::dec << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
+						outFile << "Line " << std::dec << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
 					else
-						cout << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
+						outFile << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
 				}
 
 			}
@@ -131,16 +132,16 @@ int main()
 				if (str1.compare(firstNum) == 0)
 				{
 					if (vCycle[i] == "Wr")
-						cout << "Line " << std::dec << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
+						outFile << "Line " << std::dec << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
 					else
-						cout << "Line " << std::dec << i + 1 << ": " << "Read S-to-D command: " << word << " words" << endl;
+						outFile << "Line " << std::dec << i + 1 << ": " << "Read S-to-D command: " << word << " words" << endl;
 				}
 				else if (str1.compare(secondNum) == 0)
 				{
 					if (vCycle[i] == "Wr")
-						cout << "Line " << std::dec << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
+						outFile << "Line " << std::dec << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
 					else
-						cout << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
+						outFile << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
 				}
 				int a = 1;
 				int b = 2;
@@ -163,10 +164,10 @@ int main()
 					{
 						part1 = vData[j].substr(0, 4);
 						part2 = vData[j].substr(4, 4);
-						//cout << part1 << " " << part2 << endl;
+						//outFile << part1 << " " << part2 << endl;
 						binPart1 = hex_str_to_bin_str(part1);
 						binPart2 = hex_str_to_bin_str(part2);
-						//cout << binPart1 << " " << binPart2 << endl;
+						//outFile << binPart1 << " " << binPart2 << endl;
 						defaultWord1.push_back(binPart1);
 
 
@@ -174,7 +175,7 @@ int main()
 						defaultWord1.push_back(binPart2);
 						line1.push_back(j + 1);
 					}
-					getWord1(defaultWord1, line1);
+					getWord1(defaultWord1, line1, outFile);
 				}
 
 				else
@@ -186,17 +187,17 @@ int main()
 						++k;
 						part1 = vData[j].substr(0, 4);
 						part2 = vData[j].substr(4, 4);
-						//cout << part1 << " " << part2 << endl;
+						//outFile << part1 << " " << part2 << endl;
 						binPart1 = hex_str_to_bin_str(part1);
 						binPart2 = hex_str_to_bin_str(part2);
-						//cout << binPart1 << " " << binPart2 << endl;
+						//outFile << binPart1 << " " << binPart2 << endl;
 						defaultWord2.push_back(binPart1);
 
 						line1.push_back(j + 1);
 						defaultWord2.push_back(binPart2);
 						line1.push_back(j + 1);
 					}
-					getWord2(defaultWord2, line1);
+					getWord2(defaultWord2, line1, outFile);
 				}
 			}
 		}
@@ -204,8 +205,8 @@ int main()
 
 
 
-	cout << endl;
-	cout << endl;
+	outFile << endl;
+	outFile << endl;
 	system("Pause");
 	return 0;
 }
@@ -254,7 +255,7 @@ string hex_str_to_bin_str(const std::string& hex)
 }
 
 
-void getWord1(vector<string> defaultWord, vector<int> line)
+void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 {
 
 	unsigned i = 0;
@@ -265,43 +266,43 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 			string word0 = defaultWord[i].substr(1, 2);
 			int hex0 = readBinary(word0);
 
-			cout << "Line " << line[i] << ": Word " << i << ": Rec_Ctrl = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Ctrl = ";
 			if (hex0 == 0)
-				cout << hex0 << " (no recording)" << endl;
+				outFile << hex0 << " (no recording)" << endl;
 			else if (hex0 == 2)
-				cout << hex << " (no processing)" << endl;
+				outFile << hex << " (no processing)" << endl;
 			else if (hex0 == 3)
-				cout << hex0 << " (processing & recording)" << endl;
+				outFile << hex0 << " (processing & recording)" << endl;
 			else
-				cout << hex0 << " (unknown) " << endl;
+				outFile << hex0 << " (unknown) " << endl;
 		}
 
 		else if (i == 1)
 		{
 			string word1 = defaultWord[i].substr(0, 3);
 			int hex1 = readBinary(word1);
-			cout << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";
 			if (hex1 == 4)
-				cout << hex1 << " (Type A) " << endl;
+				outFile << hex1 << " (Type A) " << endl;
 			else if (hex1 == 5)
-				cout << hex1 << " (Type B) " << endl;
+				outFile << hex1 << " (Type B) " << endl;
 			else if (hex1 == 6)
-				cout << hex1 << " (Type C) " << endl;
+				outFile << hex1 << " (Type C) " << endl;
 			else
-				cout << hex1 << " (unknown) " << endl;
+				outFile << hex1 << " (unknown) " << endl;
 		}
 
 		else if (i == 4)
 		{
 			string word4 = defaultWord[i].substr(15, 1);
 			int hex4 = readBinary(word4);
-			cout << "Line " << line[i] << ": Word " << i << ": Rec_Raw =";
+			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Raw =";
 			if (hex4 == 0)
-				cout << hex4 << " (disable) " << endl;
+				outFile << hex4 << " (disable) " << endl;
 			else if (hex4 == 1)
-				cout << hex4 << " (enable) " << endl;
+				outFile << hex4 << " (enable) " << endl;
 			else
-				cout << hex4 << endl;
+				outFile << hex4 << endl;
 		}
 
 
@@ -309,86 +310,86 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 		{
 			string word5 = defaultWord[i].substr(9, 7);
 			int hex5 = readBinary(word5);
-			cout << "Line " << line[i] << ": Word " << i << " : Cmd_ID =" << hex5 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << " : Cmd_ID =" << hex5 << endl;
 		}
 
 		else if (i == 10)
 		{
 			string word10 = defaultWord[i].substr(0, 5);
 			int hex10 = readBinary(word10);
-			cout << "Line " << line[i] << ": Word " << i << " : Num_Responses =" << hex10 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << " : Num_Responses =" << hex10 << endl;
 		}
 
 		else if (i == 15)
 		{
 			string word15 = defaultWord[i].substr(13, 1);
 			int hex15 = readBinary(word15);
-			cout << "Line " << line[i] << ": Word " << i << ": Reset_Enable = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Reset_Enable = ";
 			if (hex15 == 0)
-				cout << hex15 << " (disable) " << endl;
+				outFile << hex15 << " (disable) " << endl;
 			else if (hex15 == 1)
-				cout << hex15 << " (enable) " << endl;
+				outFile << hex15 << " (enable) " << endl;
 			else
-				cout << hex15 << endl;
+				outFile << hex15 << endl;
 		}
 
 		else if (i == 22)
 		{
 			string word22 = defaultWord[i].substr(12, 1);
 			int hex22 = readBinary(word22);
-			cout << "Line " << line[i] << ": Word " << i << ": Direction = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Direction = ";
 			if (hex22 == 0)
-				cout << hex22 << " (Right) " << endl;
+				outFile << hex22 << " (Right) " << endl;
 			else if (hex22 == 1)
-				cout << hex22 << " (Left) " << endl;
+				outFile << hex22 << " (Left) " << endl;
 			else
-				cout << hex22 << endl;
+				outFile << hex22 << endl;
 		}
 
 		else if (i == 32)
 		{
 			string word32 = defaultWord[i].substr(1, 15);
 			int hex32 = readBinary(word32);
-			cout << "Line " << line[i] << ": Word " << i << " : Num_Samples = " << hex32 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << " : Num_Samples = " << hex32 << endl;
 		}
 
 		else if (i == 37)
 		{
 			string word37 = defaultWord[i].substr(0, 1);
 			int hex37 = readBinary(word37);
-			cout << "Line " << line[i] << ": Word " << i << ": Parity = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Parity = ";
 			if (hex37 == 0)
-				cout << hex37 << " (even) " << endl;
+				outFile << hex37 << " (even) " << endl;
 			else if (hex37 == 1)
-				cout << hex37 << " (odd) " << endl;
+				outFile << hex37 << " (odd) " << endl;
 			else
-				cout << hex37 << endl;
+				outFile << hex37 << endl;
 		}
 
 		else if (i == 38)
 		{
 			string word38 = defaultWord[i].substr(1, 1);
 			int hex38 = readBinary(word38);
-			cout << "Line " << line[i] << ": Word " << i << ": Test = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Test = ";
 			if (hex38 == 0)
-				cout << hex38 << " (disable) " << endl;
+				outFile << hex38 << " (disable) " << endl;
 			else if (hex38 == 1)
-				cout << hex38 << " (enable) " << endl;
+				outFile << hex38 << " (enable) " << endl;
 			else
-				cout << hex38 << endl;
+				outFile << hex38 << endl;
 		}
 
 		else if (i == 40)
 		{
 			string word40 = defaultWord[i].substr(8, 1);
 			int hex40 = readBinary(word40);
-			cout << "Line " << line[i] << ": Word " << i << ": Ctrl_Enable = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Ctrl_Enable = ";
 			if (hex40 == 0)
-				cout << hex40 << " (disable) " << endl;
+				outFile << hex40 << " (disable) " << endl;
 			else if (hex40 == 1)
-				cout << hex40 << " (enable) " << endl;
+				outFile << hex40 << " (enable) " << endl;
 			else
-				cout << hex40 << endl;
+				outFile << hex40 << endl;
 		}
 
 		else if (i == 41)
@@ -396,7 +397,7 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 
 			string word41 = defaultWord[i].substr(1, 7);
 			int hex41 = readBinary(word41);
-			cout << "Line " << line[i] << ": Word " << i << " : Code =" << hex41 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << " : Code =" << hex41 << endl;
 		}
 
 
@@ -404,7 +405,7 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 	}
 }
 
-void getWord2(vector<string> defaultWord, vector<int> line)
+void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 {
 	int i = defaultWord.size();
 	do
@@ -414,129 +415,129 @@ void getWord2(vector<string> defaultWord, vector<int> line)
 			string word0 = defaultWord[i].substr(1, 2);
 			int hex0 = readBinary(word0);
 
-			cout << "Line " << line[i] << ": Word " << i << ": Rec_Ctrl = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Ctrl = ";
 			if (hex0 == 0)
-				cout << hex0 << " (no recording)" << endl;
+				outFile << hex0 << " (no recording)" << endl;
 			else if (hex0 == 2)
-				cout << hex << " (no processing)" << endl;
+				outFile << hex << " (no processing)" << endl;
 			else if (hex0 == 3)
-				cout << hex0 << " (processing & recording)" << endl;
+				outFile << hex0 << " (processing & recording)" << endl;
 			else
-				cout << hex0 << " (unknown) " << endl;
+				outFile << hex0 << " (unknown) " << endl;
 		}
 
 		else if (i == 1)
 		{
 			string word1 = defaultWord[i].substr(0, 3);
 			int hex1 = readBinary(word1);
-			cout << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";
 			if (hex1 == 4)
-				cout << hex1 << " (Type A) " << endl;
+				outFile << hex1 << " (Type A) " << endl;
 			else if (hex1 == 5)
-				cout << hex1 << " (Type B) " << endl;
+				outFile << hex1 << " (Type B) " << endl;
 			else if (hex1 == 6)
-				cout << hex1 << " (Type C) " << endl;
+				outFile << hex1 << " (Type C) " << endl;
 			else
-				cout << hex1 << endl;
+				outFile << hex1 << endl;
 		}
 
 		else if (i == 4)
 		{
 			string word4 = defaultWord[i].substr(15, 1);
 			int hex4 = readBinary(word4);
-			cout << "Line " << line[i] << ": Word " << i << ": Rec_Raw = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Raw = ";
 			if (hex4 == 0)
-				cout << hex4 << " (disable) " << endl;
+				outFile << hex4 << " (disable) " << endl;
 			else if (hex4 == 1)
-				cout << hex4 << " (enable) " << endl;
+				outFile << hex4 << " (enable) " << endl;
 			else
-				cout << hex4 << endl;
+				outFile << hex4 << endl;
 		}
 
 		else if (i == 5)
 		{
 			string word5 = defaultWord[i].substr(9, 7);
 			int hex5 = readBinary(word5);
-			cout << "Line " << line[i] << ": Word " << i << " : Cmd_ID = " << hex5 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << " : Cmd_ID = " << hex5 << endl;
 		}
 
 		else if (i == 10)
 		{
 			string word10 = defaultWord[i].substr(0, 5);
 			int hex10 = readBinary(word10);
-			cout << "Line " << line[i] << ": Word " << i << " : Num_Responses = " << hex10 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << " : Num_Responses = " << hex10 << endl;
 		}
 
 		else if (i == 15)
 		{
 			string word15 = defaultWord[i].substr(13, 1);
 			int hex15 = readBinary(word15);
-			cout << "Line " << line[i] << ": Word " << i << ": Reset_Enable = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Reset_Enable = ";
 			if (hex15 == 0)
-				cout << hex15 << " (disable) " << endl;
+				outFile << hex15 << " (disable) " << endl;
 			else if (hex15 == 1)
-				cout << hex15 << " (enable) " << endl;
+				outFile << hex15 << " (enable) " << endl;
 			else
-				cout << hex15 << endl;
+				outFile << hex15 << endl;
 		}
 
 		else if (i == 22)
 		{
 			string word22 = defaultWord[i].substr(12, 1);
 			int hex22 = readBinary(word22);
-			cout << "Line " << line[i] << ": Word " << i << ": Direction = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Direction = ";
 			if (hex22 == 0)
-				cout << hex22 << " (Right) " << endl;
+				outFile << hex22 << " (Right) " << endl;
 			else if (hex22 == 1)
-				cout << hex22 << " (Left) " << endl;
+				outFile << hex22 << " (Left) " << endl;
 			else
-				cout << hex22 << endl;
+				outFile << hex22 << endl;
 		}
 
 		else if (i == 32)
 		{
 			string word32 = defaultWord[i].substr(1, 15);
 			int hex32 = readBinary(word32);
-			cout << "Line " << line[i] << ": Word " << i << " : Num_Samples = " << hex32 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << " : Num_Samples = " << hex32 << endl;
 		}
 
 		else if (i == 37)
 		{
 			string word37 = defaultWord[i].substr(0, 1);
 			int hex37 = readBinary(word37);
-			cout << "Line " << line[i] << ": Word " << i << ": Parity = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Parity = ";
 			if (hex37 == 0)
-				cout << hex37 << " (even) " << endl;
+				outFile << hex37 << " (even) " << endl;
 			else if (hex37 == 1)
-				cout << hex37 << " (odd) " << endl;
+				outFile << hex37 << " (odd) " << endl;
 			else
-				cout << hex37 << endl;
+				outFile << hex37 << endl;
 		}
 
 		else if (i == 38)
 		{
 			string word38 = defaultWord[i].substr(1, 1);
 			int hex38 = readBinary(word38);
-			cout << "Line " << line[i] << ": Word " << i << ": Test = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Test = ";
 			if (hex38 == 0)
-				cout << hex38 << " (disable) " << endl;
+				outFile << hex38 << " (disable) " << endl;
 			else if (hex38 == 1)
-				cout << hex38 << " (enable) " << endl;
+				outFile << hex38 << " (enable) " << endl;
 			else
-				cout << hex38 << endl;
+				outFile << hex38 << endl;
 		}
 
 		else if (i == 40)
 		{
 			string word40 = defaultWord[i].substr(8, 1);
 			int hex40 = readBinary(word40);
-			cout << "Line " << line[i] << ": Word " << i << ": Ctrl_Enable = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Ctrl_Enable = ";
 			if (hex40 == 0)
-				cout << hex40 << " (disable) " << endl;
+				outFile << hex40 << " (disable) " << endl;
 			else if (hex40 == 1)
-				cout << hex40 << " (enable) " << endl;
+				outFile << hex40 << " (enable) " << endl;
 			else
-				cout << hex40 << endl;
+				outFile << hex40 << endl;
 		}
 
 		else if (i == 41)
@@ -544,7 +545,7 @@ void getWord2(vector<string> defaultWord, vector<int> line)
 
 			string word41 = defaultWord[i].substr(1, 7);
 			int hex41 = readBinary(word41);
-			cout << "Line " << line[i] << ": Word " << i << " : Code =" << hex41 << endl;
+			outFile << "Line " << line[i] << ": Word " << i << " : Code =" << hex41 << endl;
 		}
 
 
