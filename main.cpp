@@ -20,104 +20,237 @@ double converTime(string time);
 
 class getData
 {
-	public:
-    	//string address, data, cycle;
-    	string sample, bgl, relTime, AbsTime, Transfer, am, address, data, size, cycle, status, iack, Fail, irq;
+public:
+	//string address, data, cycle;
+	string sample, bgl, relTime, AbsTime, Transfer, am, address, data, size, cycle, status, iack, Fail, irq;
 };
 
 int main()
 {
 	vector<string> vAddress;
-    	vector<string> vData;
-    	vector<string> vCycle;
-    	vector<string> vRelTime;
+	vector<string> vData;
+	vector<string> vCycle;
+	vector<string> vRelTime;
 
-    	getData first;
-    	string sample, bgl, relTime, AbsTime, Transfer, am, address, data, size, cycle, status, iack, Fail, irq;
-    	ifstream inFile("test_data.log");
+	getData first;
+	string sample, bgl, relTime, AbsTime, Transfer, am, address, data, size, cycle, status, iack, Fail, irq;
+	ifstream inFile("test_data.log");
 
-    	if (inFile.is_open())
-    	{
-        	//inFile >> address >> data >> cycle;
-        	inFile >> sample >> bgl >> relTime >> AbsTime >> Transfer >> am >> address >> data >> size >> cycle >> status >> iack >> Fail >> irq;
-        	first.address = address;
-        	first.data = data;
-        	first.cycle = cycle;
-        	first.relTime = relTime;
-        	vAddress.push_back(first.address);
-        	vData.push_back(first.data);
-        	vCycle.push_back(first.cycle);
-        	vRelTime.push_back(first.relTime);
-        	
+	if (inFile.is_open())
+	{
+		//inFile >> address >> data >> cycle;
+		inFile >> sample >> bgl >> relTime >> AbsTime >> Transfer >> am >> address >> data >> size >> cycle >> status >> iack >> Fail >> irq;
+		first.address = address;
+		first.data = data;
+		first.cycle = cycle;
+		first.relTime = relTime;
+		vAddress.push_back(first.address);
+		vData.push_back(first.data);
+		vCycle.push_back(first.cycle);
+		vRelTime.push_back(first.relTime);
+
 		while (inFile.good())
-        	{
-            		getData next;
-            		//++it;
+		{
+			getData next;
+			//++it;
 
-            		//inFile >> address >> data >> cycle;
-            		inFile >> sample >> bgl >> relTime >> AbsTime >> Transfer >> am >> address >> data >> size >> cycle >> status >> iack >> Fail >> irq;
-            		next.address = address;
-            		next.data = data;
-            		next.cycle = cycle;
-            		next.relTime = relTime;
-            		vAddress.push_back(next.address);
-            		vData.push_back(next.data);
-            		vCycle.push_back(next.cycle);
-            		vRelTime.push_back(next.relTime);
-        	}
+			//inFile >> address >> data >> cycle;
+			inFile >> sample >> bgl >> relTime >> AbsTime >> Transfer >> am >> address >> data >> size >> cycle >> status >> iack >> Fail >> irq;
+			next.address = address;
+			next.data = data;
+			next.cycle = cycle;
+			next.relTime = relTime;
+			vAddress.push_back(next.address);
+			vData.push_back(next.data);
+			vCycle.push_back(next.cycle);
+			vRelTime.push_back(next.relTime);
+		}
 	}
 
 	else
-        	cout << "Cannot open file" << endl;
+		cout << "Cannot open file" << endl;
 
-    	inFile.close();
-
-
+	inFile.close();
 
 
+	//for(unsigned i = 0; i < vAddress.size(); ++i)
+	//	cout << vAddress[i] << " ";
+	//cout << endl;
+	//for(unsigned i = 0; i < vData.size(); ++i)
+	//	cout << vData[i] << " ";
 
+	string firstNum = "40000810";
+	string secondNum = "40000C18";
+	string str1;
+	int calData;
+	double tRSD = 0.0;
+	double tRDS = 0.0;
+	double tWSD = 0.0;
+	double tWDS = 0.0;
+	for (unsigned i = 1; i < vAddress.size(); ++i)
+	{
+		str1 = vAddress[i];
+		vector<int> line;
+		line.push_back(i + 1);
+
+		if (str1.compare(firstNum) == 0 || str1.compare(secondNum) == 0)
+		{
+			string con = vData[i];
+			calData = calculateData(con);
+			cout << endl;
+			int word = calData;
+			if (word == 0)
+			{
+				if (str1.compare(firstNum) == 0)
+				{
+
+					if (vCycle[i] == "Wr")
+					{
+						tWSD += converTime(vRelTime[i]);
+						cout << "Line " << i + 1 << ":" << "Write S-to-D command: " << word << " words" << endl;
+					}
+					else
+					{
+
+						cout << "Line " << i + 1 << ":" << "Read S-to-D command: " << word << " words" << endl;
+					}
+				}
+				else
+				{
+
+					if (vCycle[i] == "Wr")
+						cout << "Line " << i + 1 << ":" << "Write D-to-S command: " << word << " words" << endl;
+					else
+						cout << "Line " << i + 1 << ":" << "Read D-to-S command: " << word << " words" << endl;
+				}
+
+			}
+			else
+			{
+				word = calData / 2;
+				if (str1.compare(firstNum) == 0)
+				{
+					if (vCycle[i] == "Wr")
+						cout << "Line " << i + 1 << ":" << "Write S-to-D command: " << word << " words" << endl;
+					else
+						cout << "Line " << i + 1 << ":" << "Read S-to-D command: " << word << " words" << endl;
+				}
+				else if (str1.compare(secondNum) == 0)
+				{
+					if (vCycle[i] == "Wr")
+						cout << "Line " << i + 1 << ":" << "Write D-to-S command: " << word << " words" << endl;
+					else
+						cout << "Line " << i + 1 << ":" << "Read D-to-S command: " << word << " words" << endl;
+				}
+				int a = 1;
+				int b = 2;
+				string part1;
+				string part2;
+				string binPart1;
+				string binPart2;
+				string start;
+				string end;
+				start = calculateData(vAddress[i + 1]);
+				end = calculateData(vAddress[i + word / 2]);
+				vector<int> line1;
+
+				if (end > start)
+				{
+
+					vector<string> defaultWord1;
+
+					for (unsigned j = i + 1; j < i + word / 2 + 1; ++j)
+					{
+						part1 = vData[j].substr(0, 4);
+						part2 = vData[j].substr(4, 4);
+						//cout << part1 << " " << part2 << endl;
+						binPart1 = hex_str_to_bin_str(part1);
+						binPart2 = hex_str_to_bin_str(part2);
+						//cout << binPart1 << " " << binPart2 << endl;
+						defaultWord1.push_back(binPart1);
+
+
+						line1.push_back(j + 1);
+						defaultWord1.push_back(binPart2);
+						line1.push_back(j + 1);
+					}
+					getWord1(defaultWord1, line1);
+				}
+
+				else
+				{
+					vector<string> defaultWord2;
+					int k = i + 1;
+					for (unsigned j = i + word / 2; j >= i + 1; j--)
+					{
+						++k;
+						part1 = vData[j].substr(0, 4);
+						part2 = vData[j].substr(4, 4);
+						//cout << part1 << " " << part2 << endl;
+						binPart1 = hex_str_to_bin_str(part1);
+						binPart2 = hex_str_to_bin_str(part2);
+						//cout << binPart1 << " " << binPart2 << endl;
+						defaultWord2.push_back(binPart1);
+
+						line1.push_back(j + 1);
+						defaultWord2.push_back(binPart2);
+						line1.push_back(j + 1);
+					}
+					getWord2(defaultWord2, line1);
+				}
+			}
+		}
+	}
+
+
+
+	cout << endl;
+	cout << endl;
+	system("Pause");
 	return 0;
 }
 
+
+
 int calculateData(string data)
 {
-    stringstream stringData;
-    stringData << data;
-    int total;
-    stringData >> hex >> total; 
+	stringstream stringData;
+	stringData << data;
+	int total;
+	stringData >> hex >> total;
 
-    return total;
+	return total;
 }
 
 const char* hex_char_to_bin(char c)
 {
-    switch (toupper(c))
-    {
-    case '0': return "0000";
-    case '1': return "0001";
-    case '2': return "0010";
-    case '3': return "0011";
-    case '4': return "0100";
-    case '5': return "0101";
-    case '6': return "0110";
-    case '7': return "0111";
-    case '8': return "1000";
-    case '9': return "1001";
-    case 'A': return "1010";
-    case 'B': return "1011";
-    case 'C': return "1100";
-    case 'D': return "1101";
-    case 'E': return "1110";
-    case 'F': return "1111";
-    }
+	switch (toupper(c))
+	{
+	case '0': return "0000";
+	case '1': return "0001";
+	case '2': return "0010";
+	case '3': return "0011";
+	case '4': return "0100";
+	case '5': return "0101";
+	case '6': return "0110";
+	case '7': return "0111";
+	case '8': return "1000";
+	case '9': return "1001";
+	case 'A': return "1010";
+	case 'B': return "1011";
+	case 'C': return "1100";
+	case 'D': return "1101";
+	case 'E': return "1110";
+	case 'F': return "1111";
+	}
 }
 
 string hex_str_to_bin_str(const std::string& hex)
 {
-    std::string bin;
-    for (unsigned i = 0; i != hex.length(); ++i)
-        bin += hex_char_to_bin(hex[i]);
-    return bin;
+	std::string bin;
+	for (unsigned i = 0; i != hex.length(); ++i)
+		bin += hex_char_to_bin(hex[i]);
+	return bin;
 }
 
 
@@ -142,7 +275,7 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 			else
 				cout << hex0 << " (unknown) " << endl;
 		}
-		
+
 		else if (i == 1)
 		{
 			string word1 = defaultWord[i].substr(0, 3);
@@ -178,7 +311,7 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 			int hex5 = readBinary(word5);
 			cout << "Line " << line[i] << ": Word " << i << " : Cmd_ID =" << hex5 << endl;
 		}
-		
+
 		else if (i == 10)
 		{
 			string word10 = defaultWord[i].substr(0, 5);
@@ -198,7 +331,7 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 			else
 				cout << hex15 << endl;
 		}
-		
+
 		else if (i == 22)
 		{
 			string word22 = defaultWord[i].substr(12, 1);
@@ -218,7 +351,7 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 			int hex32 = readBinary(word32);
 			cout << "Line " << line[i] << ": Word " << i << " : Num_Samples = " << hex32 << endl;
 		}
-		
+
 		else if (i == 37)
 		{
 			string word37 = defaultWord[i].substr(0, 1);
@@ -244,7 +377,7 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 			else
 				cout << hex38 << endl;
 		}
-		
+
 		else if (i == 40)
 		{
 			string word40 = defaultWord[i].substr(8, 1);
@@ -257,7 +390,7 @@ void getWord1(vector<string> defaultWord, vector<int> line)
 			else
 				cout << hex40 << endl;
 		}
-		
+
 		else if (i == 41)
 		{
 
@@ -418,60 +551,60 @@ void getWord2(vector<string> defaultWord, vector<int> line)
 		i--;
 
 	} while (i >= 0);
-}	
+}
 int readBinary(string binaryNum)
 {
-    long dec = 0;
-    
-    int x = 0;
-    int base = pow(2, binaryNum.length() - 1);
+	long dec = 0;
+
+	int x = 0;
+	int base = pow(2, binaryNum.length() - 1);
 
 
-    while (binaryNum[x])
-    {
-        char currBit = binaryNum[x];
-        int binNum = currBit - '0';
-        dec += binNum * base;
-        base /= 2;
-        x++;
-    }
-    return dec;
-}        
+	while (binaryNum[x])
+	{
+		char currBit = binaryNum[x];
+		int binNum = currBit - '0';
+		dec += binNum * base;
+		base /= 2;
+		x++;
+	}
+	return dec;
+}
 
 double converTime(string time)
 {
-    bool nanoFlag = false;
-    bool microFlag = false;
-    bool milliFlag = false;
-    double finalTime = 0;
+	bool nanoFlag = false;
+	bool microFlag = false;
+	bool milliFlag = false;
+	double finalTime = 0;
 
-    for (int i = 0; i < time.length(); i++)
-    {
-        if (time[i] == 'n')
-            nanoFlag = true;
-        if (time[i] == 'u')
-            microFlag = true;
-        if (time[i] == 'm')
-            milliFlag = true;
-    }
+	for (int i = 0; i < time.length(); i++)
+	{
+		if (time[i] == 'n')
+			nanoFlag = true;
+		if (time[i] == 'u')
+			microFlag = true;
+		if (time[i] == 'm')
+			milliFlag = true;
+	}
 
-    string justTime = time.substr(0, time.length() - 2);
-    double theTime = stod(justTime);
+	string justTime = time.substr(0, time.length() - 2);
+	double theTime = stod(justTime);
 
-    if (nanoFlag)
-    {
-        finalTime = theTime * pow(10, -9);
-    }
-    if (microFlag)
-    {
-        finalTime = theTime * pow(10, -6);
-    }
-    if (milliFlag)
-    {
-        finalTime = theTime * pow(10, -3);
-    }
+	if (nanoFlag)
+	{
+		finalTime = theTime * pow(10, -9);
+	}
+	if (microFlag)
+	{
+		finalTime = theTime * pow(10, -6);
+	}
+	if (milliFlag)
+	{
+		finalTime = theTime * pow(10, -3);
+	}
 
 
-    return finalTime;
+	return finalTime;
 }
 
