@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS  = -g -Wall
+CFLAGS  = -g -Wall -std=gnu++0x 
 
 default : main
 
