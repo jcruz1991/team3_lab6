@@ -107,21 +107,21 @@ int main()
 					if (vCycle[i] == "Wr")
 					{
 						tWSD += converTime(vRelTime[i]);
-						cout << "Line " << i + 1 << ":" << "Write S-to-D command: " << word << " words" << endl;
+						cout << "Line " << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
 					}
 					else
 					{
 
-						cout << "Line " << i + 1 << ":" << "Read S-to-D command: " << word << " words" << endl;
+						cout << "Line " << i + 1 << ": " << "Read S-to-D command: " << word << " words" << endl;
 					}
 				}
 				else
 				{
 
 					if (vCycle[i] == "Wr")
-						cout << "Line " << i + 1 << ":" << "Write D-to-S command: " << word << " words" << endl;
+						cout << "Line " << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
 					else
-						cout << "Line " << i + 1 << ":" << "Read D-to-S command: " << word << " words" << endl;
+						cout << "Line " << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
 				}
 
 			}
@@ -131,16 +131,16 @@ int main()
 				if (str1.compare(firstNum) == 0)
 				{
 					if (vCycle[i] == "Wr")
-						cout << "Line " << i + 1 << ":" << "Write S-to-D command: " << word << " words" << endl;
+						cout << "Line " << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
 					else
-						cout << "Line " << i + 1 << ":" << "Read S-to-D command: " << word << " words" << endl;
+						cout << "Line " << i + 1 << ": " << "Read S-to-D command: " << word << " words" << endl;
 				}
 				else if (str1.compare(secondNum) == 0)
 				{
 					if (vCycle[i] == "Wr")
-						cout << "Line " << i + 1 << ":" << "Write D-to-S command: " << word << " words" << endl;
+						cout << "Line " << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
 					else
-						cout << "Line " << i + 1 << ":" << "Read D-to-S command: " << word << " words" << endl;
+						cout << "Line " << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
 				}
 				int a = 1;
 				int b = 2;
