@@ -223,14 +223,13 @@ int main()
 
 int calculateData(string data)
 {
-	stringstream stringData;
+	stringstream stringData;    //creates a stream for the data being passed
 	stringData << data;
 	int total;
-	stringData >> hex >> total;
+	stringData >> hex >> total;    //formats total to hexadecimal
 
 	return total;
 }
-
 const char* hex_char_to_bin(char c)
 {
 	switch (toupper(c))
@@ -450,16 +449,17 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 
 void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 {
-	int i = defaultWord.size();
+	int i = defaultWord.size();      //sets i to size of the defaultWord
 
 	do
 	{
+                //if word size is 0, grabs appropriate substring and outputs to outFile
 		if (i == 0)
 		{
-			string word0 = defaultWord[i].substr(1, 2);
-			int hex0 = readBinary(word0);
+			string word0 = defaultWord[i].substr(1, 2);    
+			int hex0 = readBinary(word0);                    
 
-			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Ctrl = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Ctrl = ";    //outputs to outFile
 
 			if (hex0 == 0)
 				outFile << hex0 << " (no recording)" << endl;
@@ -471,46 +471,46 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 				outFile << hex0 << " (processing & recording)" << endl;
 
 			else
-				outFile << hex0 << " (unknown)" << endl;
+				outFile << hex0 << " (unknown) " << endl;
 		}
-
+                //if word size is 1, grabs appropriate substring and outputs to outFile
 		else if (i == 1)
 		{
-			string word1 = defaultWord[i].substr(0, 3);
-			int hex1 = readBinary(word1);
+			string word1 = defaultWord[i].substr(0, 3);  
+			int hex1 = readBinary(word1);                   
 
-			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";      //outputs to outFile
 
-			if (hex1 == 4)
-				outFile << hex1 << " (Type A)" << endl;
+			if (hex1 == 4)  //checks if hex1 is equal to four
+				outFile << hex1 << " (Type A) " << endl;                 // if equal to 4 then Type A
 
-			else if (hex1 == 5)
-				outFile << hex1 << " (Type B)" << endl;
+			else if (hex1 == 5) //checks if hex1 is equal to five
+				outFile << hex1 << " (Type B) " << endl;                 //if equal to 5 then Type B
 
-			else if (hex1 == 6)
-				outFile << hex1 << " (Type C)" << endl;
+			else if (hex1 == 6) //checks if hex1 is equal to 6
+				outFile << hex1 << " (Type C) " << endl;                 //if equal to 5 then Type C
 
 			else
-				outFile << hex1 << " (unknown)" << endl;
+				outFile << hex1 << endl;                               
 		}
-
+                //if word size is 4, grabs appropriate substring and outputs to outFile
 		else if (i == 4)
 		{
-			string word4 = defaultWord[i].substr(15, 1);
-			int hex4 = readBinary(word4);
+			string word4 = defaultWord[i].substr(15, 1);   
+			int hex4 = readBinary(word4);                 
 
-			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Raw = ";
+			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Raw = ";  //outputs to outFile
 
 			if (hex4 == 0)
-				outFile << hex4 << " (disable)" << endl;
+				outFile << hex4 << " (disable) " << endl;   // if hex4 equal to zero then set disable
 
 			else if (hex4 == 1)
-				outFile << hex4 << " (enable)" << endl;
+				outFile << hex4 << " (enable) " << endl;    //if hex4 equal to one then set enable
 
 			else
 				outFile << hex4 << endl;
 		}
-
+                //if word size is 5, grabs appropriate substring and outputs to outFile
 		else if (i == 5)
 		{
 			string word5 = defaultWord[i].substr(9, 7);
@@ -518,7 +518,7 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 
 			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_ID = " << hex5 << endl;
 		}
-
+                //if word size is 10, grabs appropriate substring and outputs to outFile
 		else if (i == 10)
 		{
 			string word10 = defaultWord[i].substr(0, 5);
@@ -526,7 +526,7 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 
 			outFile << "Line " << line[i] << ": Word " << i << ": Num_Responses = " << hex10 << endl;
 		}
-
+                //if word size is 15, grabs appropriate substring and outputs to outFile
 		else if (i == 15)
 		{
 			string word15 = defaultWord[i].substr(13, 1);
@@ -535,15 +535,15 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Reset_Enable = ";
 
 			if (hex15 == 0)
-				outFile << hex15 << " (disable)" << endl;
+				outFile << hex15 << " (disable) " << endl;             //if hex15 equal to zero then disable
 
 			else if (hex15 == 1)
-				outFile << hex15 << " (enable)" << endl;
+				outFile << hex15 << " (enable) " << endl;              //if hex15 equal to one then enable
 
 			else
 				outFile << hex15 << endl;
 		}
-
+                //if word size is 22, grabs appropriate substring and outputs to outFile
 		else if (i == 22)
 		{
 			string word22 = defaultWord[i].substr(12, 1);
@@ -552,15 +552,15 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Direction = ";
 
 			if (hex22 == 0)
-				outFile << hex22 << " (Right)" << endl;
+				outFile << hex22 << " (Right) " << endl;            //if hex22 is equal to zero then Right
 
 			else if (hex22 == 1)
-				outFile << hex22 << " (Left)" << endl;
+				outFile << hex22 << " (Left) " << endl;             //if hex22 is equal to one then Left
 
 			else
 				outFile << hex22 << endl;
 		}
-
+                //if size is 32, grabs appropriate substring and outputs to outFile
 		else if (i == 32)
 		{
 			string word32 = defaultWord[i].substr(1, 15);
@@ -568,7 +568,7 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 
 			outFile << "Line " << line[i] << ": Word " << i << ": Num_Samples = " << hex32 << endl;
 		}
-
+                //if word size is 37, grabs appropriate substring and outputs to outFile
 		else if (i == 37)
 		{
 			string word37 = defaultWord[i].substr(0, 1);
@@ -577,15 +577,15 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Parity = ";
 
 			if (hex37 == 0)
-				outFile << hex37 << " (even)" << endl;
+				outFile << hex37 << " (even) " << endl;           //if hex37 equal to zero then even
 
 			else if (hex37 == 1)
-				outFile << hex37 << " (odd)" << endl;
+				outFile << hex37 << " (odd) " << endl;           //if hex37 equal to one then odd
 
 			else
 				outFile << hex37 << endl;
 		}
-
+                //if word size is 38, grabs appropriate substring and outputs to outFile
 		else if (i == 38)
 		{
 			string word38 = defaultWord[i].substr(1, 1);
@@ -594,15 +594,15 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Test = ";
 
 			if (hex38 == 0)
-				outFile << hex38 << " (disable)" << endl;
+				outFile << hex38 << " (disable) " << endl;        //if hex38 equal to zero set disable
 
 			else if (hex38 == 1)
-				outFile << hex38 << " (enable)" << endl;
+				outFile << hex38 << " (enable) " << endl;         //if hex38 equal to one set enable
 
 			else
 				outFile << hex38 << endl;
 		}
-
+                //if word size is 40, grabs appropriate substring and outputs to outFile
 		else if (i == 40)
 		{
 			string word40 = defaultWord[i].substr(8, 1);
@@ -611,18 +611,18 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Ctrl_Enable = ";
 
 			if (hex40 == 0)
-				outFile << hex40 << " (disable)" << endl;
+				outFile << hex40 << " (disable) " << endl;   //if hex40 equal to zero then set disable
 
 			else if (hex40 == 1)
-				outFile << hex40 << " (enable)" << endl;
+				outFile << hex40 << " (enable) " << endl;    //if hex40 equal to one then set enable
 
 			else
 				outFile << hex40 << endl;
 		}
-
+                //if word size is 41, grabs appropriate substring and outputs to outFile
 		else if (i == 41)
 		{
-			string word41 = defaultWord[i].substr(1, 7);
+			string word41 = defaultWord[i].substr(1, 7);  
 			int hex41 = readBinary(word41);
 
 			outFile << "Line " << line[i] << ": Word " << i << ": Code = " << hex41 << endl;
@@ -657,12 +657,14 @@ int readBinary(string binaryNum)
 
 double converTime(string time)
 {
+        //sets flags for nanoseconds microseconds and milliseconds
 	bool nanoFlag = false;
 	bool microFlag = false;
 	bool milliFlag = false;
 	double finalTime = 0;
 
-	for (unsigned i = 0; i < time.length(); i++)
+        //checks to see if time is ns, us, or ms and sets flags accordingly
+	for (int i = 0; i < time.length(); i++)
 	{
 		if (time[i] == 'n')
 			nanoFlag = true;
@@ -673,25 +675,29 @@ double converTime(string time)
 		if (time[i] == 'm')
 			milliFlag = true;
 	}
-
+        
+	//removes ns, us, or ms from time string
 	string justTime = time.substr(0, time.length() - 2);
-	double theTime = stod(justTime);
-
+	double theTime = stod(justTime);     //converts to double
+        
+	//converts nanoseconds to seconds
 	if (nanoFlag)
 	{
 		finalTime = theTime * pow(10, -9);
+		finalTime = finalTime * 0.125;
 	}
 
+        //converts microseconds to seconds
 	if (microFlag)
 	{
 		finalTime = theTime * pow(10, -6);
 	}
 
+        //converts milliseconds to seconds
 	if (milliFlag)
 	{
 		finalTime = theTime * pow(10, -3);
 	}
 
-
-	return finalTime;
+	return finalTime;   //returns the final time that it took to complete action
 }
