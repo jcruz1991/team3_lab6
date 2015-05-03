@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <list>
+//#include <list>
 #include <vector>
 #include <iterator>
 #include <algorithm>
@@ -35,8 +35,7 @@ int main()
 	string sample, bgl, relTime, AbsTime, Transfer, am, address, data, size, cycle, status, iack, Fail, irq;
 	
 	ifstream inFile("test_data.log");
-	ofstream outFile("output.log");
-
+	
 	if (inFile.is_open())
 	{
 		inFile >> sample >> bgl >> relTime >> AbsTime >> Transfer >> am >> address >> data >> size >> cycle >> status >> iack >> Fail >> irq;
@@ -70,10 +69,13 @@ int main()
 	}
 
 	else
-		outFile << "Cannot open file" << endl;
-
+	{
+		cout << "Cannot open file 'test_data.log'." << endl;
+		return 1;
+	}
+		
 	inFile.close();
-
+	ofstream outFile("output.log");
 
 	string firstNum = "40000810";
 	string secondNum = "40000C18";
@@ -94,7 +96,6 @@ int main()
 		{
 			string con = vData[i];
 			calData = calculateData(con);
-			outFile << endl;
 
 			int word = calData;
 
@@ -123,7 +124,6 @@ int main()
 					else
 						outFile << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
 				}
-
 			}
 
 			else
@@ -209,13 +209,13 @@ int main()
 					getWord2(defaultWord2, line1, outFile);
 				}
 			}
+		outFile << endl;
 		}
 	}
 
-
 	outFile << endl;
 	outFile << endl;
-	system("Pause");
+	//system("Pause");
 	return 0;
 }
 
@@ -251,6 +251,7 @@ const char* hex_char_to_bin(char c)
 		case 'D': return "1101";
 		case 'E': return "1110";
 		case 'F': return "1111";
+		default : return "";
 	}
 }
 
@@ -299,16 +300,16 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";
 
 			if (hex1 == 4)
-				outFile << hex1 << " (Type A) " << endl;
+				outFile << hex1 << " (Type A)" << endl;
 
 			else if (hex1 == 5)
-				outFile << hex1 << " (Type B) " << endl;
+				outFile << hex1 << " (Type B)" << endl;
 
 			else if (hex1 == 6)
-				outFile << hex1 << " (Type C) " << endl;
+				outFile << hex1 << " (Type C)" << endl;
 
 			else
-				outFile << hex1 << " (unknown) " << endl;
+				outFile << hex1 << " (unknown)" << endl;
 		}
 
 		else if (i == 4)
@@ -352,9 +353,9 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Reset_Enable = ";
 
 			if (hex15 == 0)
-				outFile << hex15 << " (disable) " << endl;
+				outFile << hex15 << " (disable)" << endl;
 			else if (hex15 == 1)
-				outFile << hex15 << " (enable) " << endl;
+				outFile << hex15 << " (enable)" << endl;
 			else
 				outFile << hex15 << endl;
 		}
@@ -367,10 +368,10 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Direction = ";
 
 			if (hex22 == 0)
-				outFile << hex22 << " (Right) " << endl;
+				outFile << hex22 << " (Right)" << endl;
 
 			else if (hex22 == 1)
-				outFile << hex22 << " (Left) " << endl;
+				outFile << hex22 << " (Left)" << endl;
 
 			else
 				outFile << hex22 << endl;
@@ -392,10 +393,10 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Parity = ";
 
 			if (hex37 == 0)
-				outFile << hex37 << " (even) " << endl;
+				outFile << hex37 << " (even)" << endl;
 
 			else if (hex37 == 1)
-				outFile << hex37 << " (odd) " << endl;
+				outFile << hex37 << " (odd)" << endl;
 
 			else
 				outFile << hex37 << endl;
@@ -409,10 +410,10 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Test = ";
 
 			if (hex38 == 0)
-				outFile << hex38 << " (disable) " << endl;
+				outFile << hex38 << " (disable)" << endl;
 
 			else if (hex38 == 1)
-				outFile << hex38 << " (enable) " << endl;
+				outFile << hex38 << " (enable)" << endl;
 
 			else
 				outFile << hex38 << endl;
@@ -427,9 +428,9 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 
 			if (hex40 == 0)
 
-				outFile << hex40 << " (disable) " << endl;
+				outFile << hex40 << " (disable)" << endl;
 			else if (hex40 == 1)
-				outFile << hex40 << " (enable) " << endl;
+				outFile << hex40 << " (enable)" << endl;
 
 			else
 				outFile << hex40 << endl;
@@ -470,7 +471,7 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 				outFile << hex0 << " (processing & recording)" << endl;
 
 			else
-				outFile << hex0 << " (unknown) " << endl;
+				outFile << hex0 << " (unknown)" << endl;
 		}
 
 		else if (i == 1)
@@ -481,16 +482,16 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";
 
 			if (hex1 == 4)
-				outFile << hex1 << " (Type A) " << endl;
+				outFile << hex1 << " (Type A)" << endl;
 
 			else if (hex1 == 5)
-				outFile << hex1 << " (Type B) " << endl;
+				outFile << hex1 << " (Type B)" << endl;
 
 			else if (hex1 == 6)
-				outFile << hex1 << " (Type C) " << endl;
+				outFile << hex1 << " (Type C)" << endl;
 
 			else
-				outFile << hex1 << endl;
+				outFile << hex1 << " (unknown)" << endl;
 		}
 
 		else if (i == 4)
@@ -501,10 +502,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Raw = ";
 
 			if (hex4 == 0)
-				outFile << hex4 << " (disable) " << endl;
+				outFile << hex4 << " (disable)" << endl;
 
 			else if (hex4 == 1)
-				outFile << hex4 << " (enable) " << endl;
+				outFile << hex4 << " (enable)" << endl;
 
 			else
 				outFile << hex4 << endl;
@@ -534,10 +535,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Reset_Enable = ";
 
 			if (hex15 == 0)
-				outFile << hex15 << " (disable) " << endl;
+				outFile << hex15 << " (disable)" << endl;
 
 			else if (hex15 == 1)
-				outFile << hex15 << " (enable) " << endl;
+				outFile << hex15 << " (enable)" << endl;
 
 			else
 				outFile << hex15 << endl;
@@ -551,10 +552,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Direction = ";
 
 			if (hex22 == 0)
-				outFile << hex22 << " (Right) " << endl;
+				outFile << hex22 << " (Right)" << endl;
 
 			else if (hex22 == 1)
-				outFile << hex22 << " (Left) " << endl;
+				outFile << hex22 << " (Left)" << endl;
 
 			else
 				outFile << hex22 << endl;
@@ -576,10 +577,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Parity = ";
 
 			if (hex37 == 0)
-				outFile << hex37 << " (even) " << endl;
+				outFile << hex37 << " (even)" << endl;
 
 			else if (hex37 == 1)
-				outFile << hex37 << " (odd) " << endl;
+				outFile << hex37 << " (odd)" << endl;
 
 			else
 				outFile << hex37 << endl;
@@ -593,10 +594,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Test = ";
 
 			if (hex38 == 0)
-				outFile << hex38 << " (disable) " << endl;
+				outFile << hex38 << " (disable)" << endl;
 
 			else if (hex38 == 1)
-				outFile << hex38 << " (enable) " << endl;
+				outFile << hex38 << " (enable)" << endl;
 
 			else
 				outFile << hex38 << endl;
@@ -610,10 +611,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Ctrl_Enable = ";
 
 			if (hex40 == 0)
-				outFile << hex40 << " (disable) " << endl;
+				outFile << hex40 << " (disable)" << endl;
 
 			else if (hex40 == 1)
-				outFile << hex40 << " (enable) " << endl;
+				outFile << hex40 << " (enable)" << endl;
 
 			else
 				outFile << hex40 << endl;
@@ -661,7 +662,7 @@ double converTime(string time)
 	bool milliFlag = false;
 	double finalTime = 0;
 
-	for (int i = 0; i < time.length(); i++)
+	for (unsigned i = 0; i < time.length(); i++)
 	{
 		if (time[i] == 'n')
 			nanoFlag = true;
@@ -694,4 +695,3 @@ double converTime(string time)
 
 	return finalTime;
 }
-

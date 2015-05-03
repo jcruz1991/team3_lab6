@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS  = -g -Wall -std=gnu++0x 
+CFLAGS  = -g -Wall -std=gnu++0x
 
 default : main
 
@@ -10,4 +10,4 @@ main.o : main.cpp
 	$(CC) $(CFLAGS) -c main.cpp
 
 clean : 
-	$(RM) main *.o *~
+	$(RM) main *.o *~ output.log
