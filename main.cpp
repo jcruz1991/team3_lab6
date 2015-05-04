@@ -31,7 +31,7 @@ int main()
 	vector<string> vData;
 	vector<string> vCycle;
 	vector<string> vRelTime;
-
+	vector<string> vSize;
 	getData fileData;
 
 	getData first;	//create and instance of getData for the first line in log
@@ -51,13 +51,14 @@ int main()
 		first.data = fileData.data;
 		first.cycle = fileData.cycle;
 		first.relTime = fileData.relTime;
+		first.size = fileData.size;
 		
 		//Place the important data in the vector that pertains to their data type
 		vAddress.push_back(first.address);
 		vData.push_back(first.data);
 		vCycle.push_back(first.cycle);
 		vRelTime.push_back(first.relTime);
-
+		vSize.push_back(first.size);
 		while (inFile.good())
 		{	
 			getData next;
@@ -73,12 +74,13 @@ int main()
 			next.data = fileData.data;
 			next.cycle = fileData.cycle;
 			next.relTime = fileData.relTime;
-
+			next.size = fileData.size;
 			//Place the important data in the vector that pertains to their data type
 			vAddress.push_back(next.address);
 			vData.push_back(next.data);
 			vCycle.push_back(next.cycle);
 			vRelTime.push_back(next.relTime);
+			vSize.push_back(next.size);
 		}
 	}
 
@@ -106,7 +108,18 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 	string secondNum = "40000C18";
 	string str1;
 	int calData;
+	double tRSD = 0.0;
+	double totaltimeRSD = 0.0;
+	double totalbitsRSD = 0.0;
+	double tRDS = 0.0;
+	double totaltimeRDS = 0.0;
+	double totalbitsRDS = 0.0;
 	double tWSD = 0.0;
+	double totaltimeWSD = 0.0;
+	double totalbitsWSD = 0.0;
+	double tWDS = 0.0;
+	double totaltimeWDS = 0.0;
+	double totalbitsWDS = 0.0;
 
 	for (unsigned i = 1; i < vAddress.size(); ++i)
 	{
@@ -128,7 +141,6 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 
 					if (vCycle[i] == "Wr")
 					{
-						tWSD += converTime(vRelTime[i]);
 						outFile << "Line " << std::dec << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
 					}
 
@@ -702,42 +714,40 @@ double converTime(string time)
 	bool nanoFlag = false;
 	bool microFlag = false;
 	bool milliFlag = false;
-	double finalTime = 0;
+	double finalTime = 0.0;
 
         //checks to see if time is ns, us, or ms and sets flags accordingly
-	for (unsigned i = 0; i < time.length(); i++)
-	{
-		if (time[i] == 'n')
+	
+		if (time.substr(time.length() - 2) == "ns")
 			nanoFlag = true;
 
-		if (time[i] == 'u')
+		if (time.substr(time.length() - 2) == "us")
 			microFlag = true;
 
-		if (time[i] == 'm')
+		if (time.substr(time.length() - 2) == "ms")
 			milliFlag = true;
 	}
         
 	//removes ns, us, or ms from time string
 	string justTime = time.substr(0, time.length() - 2);
-	double theTime = stod(justTime);     //converts to double
+	double theTime = atof(justTime.c_str());     //converts to double
         
-	//converts nanoseconds to seconds
+	//converts nanoseconds to microseconds
 	if (nanoFlag)
 	{
-		finalTime = theTime * pow(10, -9);
-		finalTime = finalTime * 0.125;
+		finalTime = theTime * 0.001;
 	}
 
-        //converts microseconds to seconds
+        //keep number as microseconds
 	if (microFlag)
 	{
-		finalTime = theTime * pow(10, -6);
+		finalTime = theTime;
 	}
 
-        //converts milliseconds to seconds
+        //converts milliseconds to microseconds
 	if (milliFlag)
 	{
-		finalTime = theTime * pow(10, -3);
+		finalTime = theTime * 1000;
 	}
 
 	return finalTime;   //returns the final time that it took to complete action
