@@ -305,7 +305,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 				outFile << hex0 << " (processing & recording)" << endl;	// if equal to 3 then processing & recording
 
 			else
-				outFile << hex0 << " (unknown) " << endl;		// if none of the above, then unknown
+				outFile << hex0 << " (unknown)" << endl;		// if none of the above, then unknown
 		}
 		
 		//if word size is 1, grabs appropriate substring and outputs to outFile
@@ -317,13 +317,13 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";      //outputs to outFile
 
 			if (hex1 == 4)  //checks if hex1 is equal to four
-				outFile << hex1 << " (Type A) " << endl;                 // if equal to 4 then Type A
+				outFile << hex1 << " (Type A)" << endl;                 // if equal to 4 then Type A
 
 			else if (hex1 == 5) //checks if hex1 is equal to five
-				outFile << hex1 << " (Type B) " << endl;                 //if equal to 5 then Type B
+				outFile << hex1 << " (Type B)" << endl;                 //if equal to 5 then Type B
 
 			else if (hex1 == 6) //checks if hex1 is equal to 6
-				outFile << hex1 << " (Type C) " << endl;                 //if equal to 5 then Type C
+				outFile << hex1 << " (Type C)" << endl;                 //if equal to 5 then Type C
 
 			else
 				outFile << hex1 << " (unknown)" << endl;		// if none of the above, then unknown
@@ -338,10 +338,10 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Raw = ";  //outputs to outFile
 
 			if (hex4 == 0)
-				outFile << hex4 << " (disable) " << endl;   // if hex4 equal to zero then set disable
+				outFile << hex4 << " (disable)" << endl;   // if hex4 equal to zero then set disable
 
 			else if (hex4 == 1)
-				outFile << hex4 << " (enable) " << endl;    //if hex4 equal to one then set enable
+				outFile << hex4 << " (enable)" << endl;    //if hex4 equal to one then set enable
 
 			else
 				outFile << hex4 << endl;
@@ -374,10 +374,10 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Reset_Enable = ";
 
 			if (hex15 == 0)
-				outFile << hex15 << " (disable) " << endl;             //if hex15 equal to zero then disable
+				outFile << hex15 << " (disable)" << endl;             //if hex15 equal to zero then disable
 
 			else if (hex15 == 1)
-				outFile << hex15 << " (enable) " << endl;              //if hex15 equal to one then enable
+				outFile << hex15 << " (enable)" << endl;              //if hex15 equal to one then enable
 
 			else
 				outFile << hex15 << endl;
@@ -392,10 +392,10 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Direction = ";
 
 			if (hex22 == 0)
-				outFile << hex22 << " (Right) " << endl;            //if hex22 is equal to zero then Right
+				outFile << hex22 << " (Right)" << endl;            //if hex22 is equal to zero then Right
 
 			else if (hex22 == 1)
-				outFile << hex22 << " (Left) " << endl;             //if hex22 is equal to one then Left
+				outFile << hex22 << " (Left)" << endl;             //if hex22 is equal to one then Left
 
 			else
 				outFile << hex22 << endl;
@@ -419,10 +419,10 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Parity = ";
 
 			if (hex37 == 0)
-				outFile << hex37 << " (even) " << endl;           //if hex37 equal to zero then even
+				outFile << hex37 << " (even)" << endl;           //if hex37 equal to zero then even
 
 			else if (hex37 == 1)
-				outFile << hex37 << " (odd) " << endl;            //if hex37 equal to one then odd
+				outFile << hex37 << " (odd)" << endl;            //if hex37 equal to one then odd
 
 			else
 				outFile << hex37 << endl;
@@ -437,10 +437,10 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Test = ";
 
 			if (hex38 == 0)
-				outFile << hex38 << " (disable) " << endl;        //if hex38 equal to zero set disable
+				outFile << hex38 << " (disable)" << endl;        //if hex38 equal to zero set disable
 
 			else if (hex38 == 1)
-				outFile << hex38 << " (enable) " << endl;         //if hex38 equal to one set enable
+				outFile << hex38 << " (enable)" << endl;         //if hex38 equal to one set enable
 
 			else
 				outFile << hex38 << endl;
@@ -455,10 +455,10 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Ctrl_Enable = ";
 
 			if (hex40 == 0)
-				outFile << hex40 << " (disable) " << endl;   //if hex40 equal to zero then set disable
+				outFile << hex40 << " (disable)" << endl;   //if hex40 equal to zero then set disable
 
 			else if (hex40 == 1)
-				outFile << hex40 << " (enable) " << endl;    //if hex40 equal to one then set enable
+				outFile << hex40 << " (enable)" << endl;    //if hex40 equal to one then set enable
 
 			else
 				outFile << hex40 << endl;
@@ -501,7 +501,7 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 				outFile << hex0 << " (processing & recording)" << endl;	// if equal to 3 then processing & recording
 
 			else
-				outFile << hex0 << " (unknown) " << endl;		// if none of the above, then unknown
+				outFile << hex0 << " (unknown)" << endl;		// if none of the above, then unknown
 		}
 
                 //if word size is 1, grabs appropriate substring and outputs to outFile
@@ -513,16 +513,16 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Cmd_Type = ";      //outputs to outFile
 
 			if (hex1 == 4)  //checks if hex1 is equal to four
-				outFile << hex1 << " (Type A) " << endl;                 // if equal to 4 then Type A
+				outFile << hex1 << " (Type A)" << endl;                 // if equal to 4 then Type A
 
 			else if (hex1 == 5) //checks if hex1 is equal to five
-				outFile << hex1 << " (Type B) " << endl;                 //if equal to 5 then Type B
+				outFile << hex1 << " (Type B)" << endl;                 //if equal to 5 then Type B
 
 			else if (hex1 == 6) //checks if hex1 is equal to 6
-				outFile << hex1 << " (Type C) " << endl;                 //if equal to 5 then Type C
+				outFile << hex1 << " (Type C)" << endl;                 //if equal to 5 then Type C
 
 			else
-				outFile << hex1 << endl;                               
+				outFile << hex1 << " (unknown)" << endl;		// if none of the above, then unknown                               
 		}
 
                 //if word size is 4, grabs appropriate substring and outputs to outFile
@@ -534,10 +534,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Rec_Raw = ";  //outputs to outFile
 
 			if (hex4 == 0)
-				outFile << hex4 << " (disable) " << endl;   // if hex4 equal to zero then set disable
+				outFile << hex4 << " (disable)" << endl;   // if hex4 equal to zero then set disable
 
 			else if (hex4 == 1)
-				outFile << hex4 << " (enable) " << endl;    //if hex4 equal to one then set enable
+				outFile << hex4 << " (enable)" << endl;    //if hex4 equal to one then set enable
 
 			else
 				outFile << hex4 << endl;
@@ -570,10 +570,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Reset_Enable = ";
 
 			if (hex15 == 0)
-				outFile << hex15 << " (disable) " << endl;             //if hex15 equal to zero then disable
+				outFile << hex15 << " (disable)" << endl;             //if hex15 equal to zero then disable
 
 			else if (hex15 == 1)
-				outFile << hex15 << " (enable) " << endl;              //if hex15 equal to one then enable
+				outFile << hex15 << " (enable)" << endl;              //if hex15 equal to one then enable
 
 			else
 				outFile << hex15 << endl;
@@ -588,10 +588,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Direction = ";
 
 			if (hex22 == 0)
-				outFile << hex22 << " (Right) " << endl;            //if hex22 is equal to zero then Right
+				outFile << hex22 << " (Right)" << endl;            //if hex22 is equal to zero then Right
 
 			else if (hex22 == 1)
-				outFile << hex22 << " (Left) " << endl;             //if hex22 is equal to one then Left
+				outFile << hex22 << " (Left)" << endl;             //if hex22 is equal to one then Left
 
 			else
 				outFile << hex22 << endl;
@@ -615,10 +615,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Parity = ";
 
 			if (hex37 == 0)
-				outFile << hex37 << " (even) " << endl;           //if hex37 equal to zero then even
+				outFile << hex37 << " (even)" << endl;           //if hex37 equal to zero then even
 
 			else if (hex37 == 1)
-				outFile << hex37 << " (odd) " << endl;           //if hex37 equal to one then odd
+				outFile << hex37 << " (odd)" << endl;           //if hex37 equal to one then odd
 
 			else
 				outFile << hex37 << endl;
@@ -633,10 +633,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Test = ";
 
 			if (hex38 == 0)
-				outFile << hex38 << " (disable) " << endl;        //if hex38 equal to zero set disable
+				outFile << hex38 << " (disable)" << endl;        //if hex38 equal to zero set disable
 
 			else if (hex38 == 1)
-				outFile << hex38 << " (enable) " << endl;         //if hex38 equal to one set enable
+				outFile << hex38 << " (enable)" << endl;         //if hex38 equal to one set enable
 
 			else
 				outFile << hex38 << endl;
@@ -651,10 +651,10 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Ctrl_Enable = ";
 
 			if (hex40 == 0)
-				outFile << hex40 << " (disable) " << endl;   //if hex40 equal to zero then set disable
+				outFile << hex40 << " (disable)" << endl;   //if hex40 equal to zero then set disable
 
 			else if (hex40 == 1)
-				outFile << hex40 << " (enable) " << endl;    //if hex40 equal to one then set enable
+				outFile << hex40 << " (enable)" << endl;    //if hex40 equal to one then set enable
 
 			else
 				outFile << hex40 << endl;
@@ -682,7 +682,7 @@ int readBinary(string binaryNum)
 	int x = 0;
 	int base = pow(2, binaryNum.length() - 1);
 
-	//convert from bianry to decimal
+	//convert from binary to decimal
 	while (binaryNum[x])
 	{
 		char currBit = binaryNum[x];
@@ -705,7 +705,7 @@ double converTime(string time)
 	double finalTime = 0;
 
         //checks to see if time is ns, us, or ms and sets flags accordingly
-	for (int i = 0; i < time.length(); i++)
+	for (unsigned i = 0; i < time.length(); i++)
 	{
 		if (time[i] == 'n')
 			nanoFlag = true;
