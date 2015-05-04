@@ -32,6 +32,8 @@ int main()
 	vector<string> vCycle;
 	vector<string> vRelTime;
 
+	getData fileData;
+
 	getData first;	//create and instance of getData for the first line in log
 	
 	ifstream inFile("test_data.log");  //Name the file we will be pulling data from
@@ -39,13 +41,16 @@ int main()
 	if (inFile.is_open())
 	{
 		//Grab the first line from the input log file
-		inFile >> sample >> bgl >> relTime >> AbsTime >> Transfer >> am >> address >> data >> size >> cycle >> status >> iack >> Fail >> irq;
+		inFile >> fileData.sample >> fileData.bgl >> fileData.relTime >> fileData.AbsTime 
+		       >> fileData.Transfer >> fileData.am >> fileData.address >> fileData.data 
+		       >> fileData.size >> fileData.cycle >> fileData.status >> fileData.iack 
+                       >> fileData.Fail >> fileData.irq;
 		
 		//Select the information we are searching for and label them
-		first.address = address;
-		first.data = data;
-		first.cycle = cycle;
-		first.relTime = relTime;
+		first.address = fileData.address;
+		first.data = fileData.data;
+		first.cycle = fileData.cycle;
+		first.relTime = fileData.relTime;
 		
 		//Place the important data in the vector that pertains to their data type
 		vAddress.push_back(first.address);
@@ -58,13 +63,16 @@ int main()
 			getData next;
 
 			//Grab the next line from the input log file
-			inFile >> sample >> bgl >> relTime >> AbsTime >> Transfer >> am >> address >> data >> size >> cycle >> status >> iack >> Fail >> irq;
+			inFile >> fileData.sample >> fileData.bgl >> fileData.relTime >> fileData.AbsTime 
+		       	       >> fileData.Transfer >> fileData.am >> fileData.address >> fileData.data 
+		               >> fileData.size >> fileData.cycle >> fileData.status >> fileData.iack 
+                               >> fileData.Fail >> fileData.irq;
 
 			//Select the information we are searching for and label them
-			next.address = address;
-			next.data = data;
-			next.cycle = cycle;
-			next.relTime = relTime;
+			next.address = fileData.address;
+			next.data = fileData.data;
+			next.cycle = fileData.cycle;
+			next.relTime = fileData.relTime;
 
 			//Place the important data in the vector that pertains to their data type
 			vAddress.push_back(next.address);
@@ -98,10 +106,7 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 	string secondNum = "40000C18";
 	string str1;
 	int calData;
-	double tRSD = 0.0;
-	double tRDS = 0.0;
 	double tWSD = 0.0;
-	double tWDS = 0.0;
 
 	for (unsigned i = 1; i < vAddress.size(); ++i)
 	{
@@ -165,8 +170,6 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 						outFile << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
 				}
 
-				int a = 1;
-				int b = 2;
 				string part1;
 				string part2;
 				string binPart1;
