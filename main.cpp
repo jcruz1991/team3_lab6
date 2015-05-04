@@ -7,9 +7,10 @@
 #include <string>
 #include <iomanip>
 #include <cmath>
+
 using namespace std;
 
-void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vData, vector<string> vCycle, vector<string> vRelTime);
+void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vData, vector<string> vCycle, vector<string> vRelTime, vector<string> vSize);
 int calculateData(string data);
 const char* hex_char_to_bin(char c);
 string hex_str_to_bin_str(const string& hex);
@@ -93,7 +94,7 @@ int main()
 	inFile.close();
 	ofstream outFile("output.log");		//Name the file we will be writing to
 
-	outputToFile(outFile, vAddress, vData, vCycle, vRelTime);  //Call output function
+	outputToFile(outFile, vAddress, vData, vCycle, vRelTime, vSize);  //Call output function
 
 	outFile << endl;
 	outFile << endl;
@@ -102,7 +103,7 @@ int main()
 }
 
 
-void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vData, vector<string> vCycle, vector<string> vRelTime)
+void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vData, vector<string> vCycle, vector<string> vRelTime, vector<string> vSize)
 {
 	string firstNum = "40000810";
 	string secondNum = "40000C18";
@@ -124,8 +125,6 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 	for (unsigned i = 1; i < vAddress.size(); ++i)
 	{
 		str1 = vAddress[i];
-		vector<int> line;
-		line.push_back(i + 1);
 
 		if (str1.compare(firstNum) == 0 || str1.compare(secondNum) == 0)
 		{
@@ -133,117 +132,218 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 			calData = calculateData(con);
 
 			int word = calData;
-
-			if (word == 0)
-			{
-				if (str1.compare(firstNum) == 0)
+			
+				if (word == 0)
 				{
-
-					if (vCycle[i] == "Wr")
+					if (str1.compare(firstNum) == 0)
 					{
-						outFile << "Line " << std::dec << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
+
+						if (vCycle[i] == "Wr")
+						{
+							double tempTime1 = 0.0;
+							tempTime1 = converTime(vRelTime[i+1]);
+							string sizeTemp1 = vSize[i].substr(1,2);
+							double dataSize1 = 0.0;
+							dataSize1 = atof(sizeTemp1.c_str());
+							totaltimeWSD += tempTime1;
+                        				totalbitsWSD += dataSize1;
+							outFile << "Line " << std::dec << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
+						}
+
+						else
+						{
+							double tempTime2 = 0.0;
+							tempTime2 = converTime(vRelTime[i + 1]);
+							string sizeTemp2 = vSize[i].substr(1, 2);
+							double dataSize2 = 0.0;
+							dataSize2 = atof(sizeTemp2.c_str());
+							totaltimeRSD += tempTime2;
+							totalbitsRSD += dataSize2;
+							outFile << "Line " << std::dec << i + 1 << ": " << "Read S-to-D command: " << word << " words" << endl;
+						}
 					}
 
 					else
 					{
-						outFile << "Line " << std::dec << i + 1 << ": " << "Read S-to-D command: " << word << " words" << endl;
+						if (vCycle[i] == "Wr")
+						{
+							double tempTime3 = 0.0;
+							tempTime3 = converTime(vRelTime[i + 1]);                    
+							string sizeTemp3 = vSize[i].substr(1, 2);
+							double dataSize3 = 0.0;
+							dataSize3 = atof(sizeTemp3.c_str());
+							totaltimeWDS += tempTime3;
+							totalbitsWDS +=dataSize3;	
+							outFile << "Line " << std::dec << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
+						}
+						else
+						{
+							double tempTime4 = 0.0 ;
+							tempTime4 = converTime(vRelTime[i + 1]);
+							string sizeTemp4 = vSize[i].substr(1, 2);
+							double dataSize4 = 0.0;
+							dataSize4 = atof(sizeTemp4.c_str());
+							totaltimeRDS += tempTime4;
+							totalbitsRDS += dataSize4;
+							outFile << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
+						}
 					}
-				}
+
+					}
 
 				else
 				{
-					if (vCycle[i] == "Wr")
-						outFile << "Line " << std::dec << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
+					word = calData / 2;
 
-					else
-						outFile << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
-				}
-			}
-
-			else
-			{
-				word = calData / 2;
-
-				if (str1.compare(firstNum) == 0)
-				{
-					if (vCycle[i] == "Wr")
-						outFile << "Line " << std::dec << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
-
-					else
-						outFile << "Line " << std::dec << i + 1 << ": " << "Read S-to-D command: " << word << " words" << endl;
-				}
-
-				else if (str1.compare(secondNum) == 0)
-				{
-					if (vCycle[i] == "Wr")
-						outFile << "Line " << std::dec << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
-
-					else
-						outFile << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
-				}
-
-				string part1;
-				string part2;
-				string binPart1;
-				string binPart2;
-				string start;
-				string end;
-
-				start = calculateData(vAddress[i + 1]);
-				end = calculateData(vAddress[i + word / 2]);
-
-				vector<int> line1;
-
-				if (end > start)
-				{
-					vector<string> defaultWord1;
-
-					for (unsigned j = i + 1; j < i + word / 2 + 1; ++j)
+					if (str1.compare(firstNum) == 0)
 					{
-						part1 = vData[j].substr(0, 4);
-						part2 = vData[j].substr(4, 4);
+						if (vCycle[i] == "Wr")
+						{
+							double tempTime5 = 0.0;
+							string sizeTemp5;
+							double dataSize5 = 0.0 ;
+							for(unsigned int j = i; j < i + word /2 + 1; ++j)
+						    	{
+								tempTime5 += converTime(vRelTime[j + 1]);
+								sizeTemp5 = vSize[j].substr(1, 2);
+								dataSize5 += atof(sizeTemp5.c_str());
+						    	}
+						    	totaltimeWSD += tempTime5;
+                            			    	totalbitsWSD += dataSize5;
 
-						binPart1 = hex_str_to_bin_str(part1);
-						binPart2 = hex_str_to_bin_str(part2);
-
-						defaultWord1.push_back(binPart1);
-
-
-						line1.push_back(j + 1);
-						defaultWord1.push_back(binPart2);
-						line1.push_back(j + 1);
+							outFile << "Line " << std::dec << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
+						}
+						else
+						{
+							double tempTime6 = 0.0;
+							string sizeTemp6;
+							double dataSize6 = 0.0 ;
+							for(unsigned int j = i; j < i + word/2 + 1; ++j)
+							    {
+								tempTime6 += converTime(vRelTime[j + 1]);
+								
+								sizeTemp6 = vSize[j].substr(1, 2);
+								dataSize6 += atof(sizeTemp6.c_str());
+							    }
+								totaltimeRSD += tempTime6;
+								totalbitsRSD += dataSize6;
+							outFile << "Line " << std::dec << i + 1 << ": " << "Read S-to-D command: " << word << " words" << endl;
+						}
 					}
 
-					getWord1(defaultWord1, line1, outFile);
-				}
-
-				else
-				{
-					vector<string> defaultWord2;
-					int k = i + 1;
-
-					for (unsigned j = i + word / 2; j >= i + 1; j--)
+					else if (str1.compare(secondNum) == 0)
 					{
-						++k;
-						part1 = vData[j].substr(0, 4);
-						part2 = vData[j].substr(4, 4);
+						if (vCycle[i] == "Wr")
+						{
+						    double tempTime7 = 0.0;
+						    string sizeTemp7;
+						    double dataSize7 = 0.0 ;
+						    for(unsigned int j = i; j < i + word/2 + 1; ++j)
+						    {
+							tempTime7 += converTime(vRelTime[j + 1]);
+						    
+							sizeTemp7 = vSize[j].substr(1, 2);
+							dataSize7 += atof(sizeTemp7.c_str());
+							
+						    }
+						    totaltimeWDS += tempTime7;
+						    totalbitsWDS +=dataSize7;
 
-						binPart1 = hex_str_to_bin_str(part1);
-						binPart2 = hex_str_to_bin_str(part2);
+							outFile << "Line " << std::dec << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
+						}
 
-						defaultWord2.push_back(binPart1);
+						else
 
-						line1.push_back(j + 1);
-						defaultWord2.push_back(binPart2);
-						line1.push_back(j + 1);
+						{		
+						    double tempTime8 = 0.0;
+						    string sizeTemp8;
+						    double dataSize8 = 0.0 ;
+						    for(unsigned int j = i; j < i + word/2 + 1; ++j)
+						    {
+							tempTime8 += converTime(vRelTime[j + 1]);
+						    
+							sizeTemp8 = vSize[j].substr(1, 2);
+							dataSize8 += atof(sizeTemp8.c_str());
+						    
+						    }
+						    totaltimeRDS += tempTime8;
+						    totalbitsRDS +=dataSize8;
+							outFile << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
+						}
 					}
 
-					getWord2(defaultWord2, line1, outFile);
+					string part1;
+					string part2;
+					string binPart1;
+					string binPart2;
+					string start;
+					string end;
+
+					start = calculateData(vAddress[i + 1]);
+					end = calculateData(vAddress[i + word / 2]);
+
+					vector<int> line1;
+
+					if (end > start)
+					{
+						vector<string> defaultWord1;
+
+						for (unsigned int j = i + 1; j < i + word / 2 + 1; ++j)
+						{
+							part1 = vData[j].substr(0, 4);
+							part2 = vData[j].substr(4, 4);
+
+							binPart1 = hex_str_to_bin_str(part1);
+							binPart2 = hex_str_to_bin_str(part2);
+
+							defaultWord1.push_back(binPart1);
+
+
+							line1.push_back(j + 1);
+							defaultWord1.push_back(binPart2);
+							line1.push_back(j + 1);
+						}
+
+						getWord1(defaultWord1, line1, outFile);
+					}
+
+						else
+						{
+							vector<string> defaultWord2;
+							int k = i + 1;
+
+							for (unsigned int j = i + word / 2; j >= i + 1; j--)
+						{
+							++k;
+							part1 = vData[j].substr(0, 4);
+							part2 = vData[j].substr(4, 4);
+
+							binPart1 = hex_str_to_bin_str(part1);
+							binPart2 = hex_str_to_bin_str(part2);
+
+							defaultWord2.push_back(binPart1);
+
+							line1.push_back(j + 1);
+							defaultWord2.push_back(binPart2);
+							line1.push_back(j + 1);
+						}
+
+						getWord2(defaultWord2, line1, outFile);
+						}
 				}
+				outFile << endl;
 			}
-		outFile << endl;
-		}
 	}
+	outFile.precision(2);
+    tRSD = totalbitsRSD/totaltimeRSD;
+    tRDS = totalbitsRDS/totaltimeRDS;
+    tWSD = totalbitsWSD/totaltimeWSD;
+    tWDS = totalbitsWDS/totaltimeWDS;
+    outFile << "Read S-to-D: " << fixed << tRSD  << " Megabits/sec" << endl;
+    outFile << "Read D-to-S: " << fixed << tRDS << " Megabits/sec" << endl;
+    outFile << "Write S-to-D: " << fixed << tWSD << " Megabits/sec"<< endl;
+    outFile << "Write D-to-S: " << fixed << tWDS << " Megabits/sec" << endl;
+
 }
 
 int calculateData(string data)
@@ -726,7 +826,6 @@ double converTime(string time)
 
 		if (time.substr(time.length() - 2) == "ms")
 			milliFlag = true;
-	}
         
 	//removes ns, us, or ms from time string
 	string justTime = time.substr(0, time.length() - 2);
