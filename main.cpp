@@ -26,80 +26,62 @@ class getData
 	string sample, bgl, relTime, AbsTime, Transfer, am, address, data, size, cycle, status, iack, Fail, irq;
 };
 
-int main()
+int main(int argc, char* argv[])
 {
-	vector<string> vAddress;
-	vector<string> vData;
-	vector<string> vCycle;
-	vector<string> vRelTime;
-	vector<string> vSize;
-	getData fileData;
-
-	getData first;	//create and instance of getData for the first line in log
-	
-	ifstream inFile("test_data.log");  //Name the file we will be pulling data from
-	
-	if (inFile.is_open())
+	if (argc != 2)
 	{
-		//Grab the first line from the input log file
-		inFile >> fileData.sample >> fileData.bgl >> fileData.relTime >> fileData.AbsTime 
-		       >> fileData.Transfer >> fileData.am >> fileData.address >> fileData.data 
-		       >> fileData.size >> fileData.cycle >> fileData.status >> fileData.iack 
-                       >> fileData.Fail >> fileData.irq;
-		
-		//Select the information we are searching for and label them
-		first.address = fileData.address;
-		first.data = fileData.data;
-		first.cycle = fileData.cycle;
-		first.relTime = fileData.relTime;
-		first.size = fileData.size;
-		
-		//Place the important data in the vector that pertains to their data type
-		vAddress.push_back(first.address);
-		vData.push_back(first.data);
-		vCycle.push_back(first.cycle);
-		vRelTime.push_back(first.relTime);
-		vSize.push_back(first.size);
-		while (inFile.good())
-		{	
-			getData next;
-
-			//Grab the next line from the input log file
-			inFile >> fileData.sample >> fileData.bgl >> fileData.relTime >> fileData.AbsTime 
-		       	       >> fileData.Transfer >> fileData.am >> fileData.address >> fileData.data 
-		               >> fileData.size >> fileData.cycle >> fileData.status >> fileData.iack 
-                               >> fileData.Fail >> fileData.irq;
-
-			//Select the information we are searching for and label them
-			next.address = fileData.address;
-			next.data = fileData.data;
-			next.cycle = fileData.cycle;
-			next.relTime = fileData.relTime;
-			next.size = fileData.size;
-			//Place the important data in the vector that pertains to their data type
-			vAddress.push_back(next.address);
-			vData.push_back(next.data);
-			vCycle.push_back(next.cycle);
-			vRelTime.push_back(next.relTime);
-			vSize.push_back(next.size);
-		}
-	}
-
-	else
-	{
-		cout << "Cannot open file 'test_data.log'." << endl;
+		cout << "Usage: " << argv[0] << " <input file>" << endl;
 		return 1;
 	}
 		
-	inFile.close();
-	ofstream outFile("output.log");		//Name the file we will be writing to
-
-	outputToFile(outFile, vAddress, vData, vCycle, vRelTime, vSize);  //Call output function
-
-	outFile << endl;
-	outFile << endl;
-
-	return 0;
+        vector<string> vAddress;
+        vector<string> vData;
+        vector<string> vCycle;
+        vector<string> vRelTime;
+        vector<string> vSize;
+        getData fileData;
+        getData next; 	
+ 	
+        ifstream inFile(argv[1]);  //Name the file we will be pulling data from
+       
+        if (inFile.is_open())
+        {
+                while (inFile.good())
+                {      
+                        //Grab the next line from the input log file
+                        inFile >> fileData.sample >> fileData.bgl >> fileData.relTime >> fileData.AbsTime
+                               >> fileData.Transfer >> fileData.am >> fileData.address >> fileData.data
+                               >> fileData.size >> fileData.cycle >> fileData.status >> fileData.iack
+                               >> fileData.Fail >> fileData.irq;
+                      
+                        //Select the information we are searching for and label them
+                        next.address = fileData.address;
+                        next.data = fileData.data;
+                        next.cycle = fileData.cycle;
+                        next.relTime = fileData.relTime;
+                        next.size = fileData.size;
+                        
+                        //Place the important data in the vector that pertains to their data type
+                        vAddress.push_back(next.address);
+                        vData.push_back(next.data);
+                        vCycle.push_back(next.cycle);
+                        vRelTime.push_back(next.relTime);
+                        vSize.push_back(next.size);
+                }
+        }
+ 
+        else
+        {
+                cout << "Cannot open file '" << argv[1] << "'." << endl;
+                return 1;
+        }
+               
+        inFile.close();
+        ofstream outFile("output.log");         //Name the file we will be writing to
+ 
+        outputToFile(outFile, vAddress, vData, vCycle, vRelTime, vSize);  //Call output function
+ 
+        return 0;
 }
 
 //Write all the command line to file
