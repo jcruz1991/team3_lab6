@@ -1,3 +1,11 @@
+/*
+	Assignment:	Lab Project #6 - Log File Parser
+	Team:		3
+	Authors:	Julio Cruz, Chase Delgadillo, Kristian Rosales, Javier Torres, Tevin Tuan Vu
+	Course: 	CPSC 254
+	Purpose:	Design, implement, and test a log file parser that parses raw command data produced by another program.
+*/
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -39,8 +47,7 @@ int main(int argc, char* argv[])
         vector<string> vCycle;
         vector<string> vRelTime;
         vector<string> vSize;
-        getData fileData;
-        getData next; 	
+        getData fileData;	
  	
         ifstream inFile(argv[1]);  //Name the file we will be pulling data from
        
@@ -53,20 +60,13 @@ int main(int argc, char* argv[])
                                >> fileData.Transfer >> fileData.am >> fileData.address >> fileData.data
                                >> fileData.size >> fileData.cycle >> fileData.status >> fileData.iack
                                >> fileData.Fail >> fileData.irq;
-                      
-                        //Select the information we are searching for and label them
-                        next.address = fileData.address;
-                        next.data = fileData.data;
-                        next.cycle = fileData.cycle;
-                        next.relTime = fileData.relTime;
-                        next.size = fileData.size;
-                        
+                                                                 
                         //Place the important data in the vector that pertains to their data type
-                        vAddress.push_back(next.address);
-                        vData.push_back(next.data);
-                        vCycle.push_back(next.cycle);
-                        vRelTime.push_back(next.relTime);
-                        vSize.push_back(next.size);
+                        vAddress.push_back(fileData.address);
+                        vData.push_back(fileData.data);
+                        vCycle.push_back(fileData.cycle);
+                        vRelTime.push_back(fileData.relTime);
+                        vSize.push_back(fileData.size);
                 }
         }
  
@@ -103,6 +103,7 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 	double tWDS = 0.0;
 	double totaltimeWDS = 0.0;
 	double totalbitsWDS = 0.0;
+	
 	//run through vector from first data line address to last line
 	for (unsigned i = 1; i < vAddress.size(); ++i)
 	{
@@ -124,8 +125,8 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 						if (vCycle[i] == "Wr")
 						{
 							double tempTime1 = 0.0;
-							tempTime1 = converTime(vRelTime[i+1]);
-							string sizeTemp1 = vSize[i].substr(1,2);
+							tempTime1 = converTime(vRelTime[i + 1]);
+							string sizeTemp1 = vSize[i].substr(1, 2);
 							double dataSize1 = 0.0;
 							dataSize1 = atof(sizeTemp1.c_str());
 							totaltimeWSD += tempTime1;
@@ -172,7 +173,7 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 						}
 					}
 
-					}
+				}
 
 				else
 				{
@@ -245,6 +246,7 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 							outFile << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
 						}
 					}
+					
 					string part1;
 					string part2;
 					string binPart1;
@@ -298,25 +300,24 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 						line2.clear();
 						}
 				}
-				}
-				else
-					{
-					outFile << "Invalid word" << endl;
-					}
-				outFile << endl;
 			}
+				else
+					outFile << "Invalid word" << endl;
+				
+				outFile << endl;
+		}
 	}
-//calculate the data rate 
+	
+	//calculate the data rate 
 	outFile.precision(2);
-    tRSD = totalbitsRSD/totaltimeRSD;
-    tRDS = totalbitsRDS/totaltimeRDS;
-    tWSD = totalbitsWSD/totaltimeWSD;
-    tWDS = totalbitsWDS/totaltimeWDS;
-    outFile << "Read S-to-D: " << fixed << tRSD  << " Megabits/sec" << endl;
-    outFile << "Read D-to-S: " << fixed << tRDS << " Megabits/sec" << endl;
-    outFile << "Write S-to-D: " << fixed << tWSD << " Megabits/sec"<< endl;
-    outFile << "Write D-to-S: " << fixed << tWDS << " Megabits/sec" << endl;
-
+	tRSD = totalbitsRSD/totaltimeRSD;
+	tRDS = totalbitsRDS/totaltimeRDS;
+	tWSD = totalbitsWSD/totaltimeWSD;
+	tWDS = totalbitsWDS/totaltimeWDS;
+	outFile << "Read S-to-D: " << fixed << tRSD  << " Megabits/sec" << endl;
+	outFile << "Read D-to-S: " << fixed << tRDS << " Megabits/sec" << endl;
+	outFile << "Write S-to-D: " << fixed << tWSD << " Megabits/sec"<< endl;
+	outFile << "Write D-to-S: " << fixed << tWDS << " Megabits/sec" << endl;
 }
 
 //get the number of bytes from the data
@@ -360,9 +361,8 @@ string hex_str_to_bin_str(const std::string& hex)
 	std::string bin;  //creates string bin for hex
 	
 	for (unsigned i = 0; i != hex.length(); ++i)
-	{
 		bin += hex_char_to_bin(hex[i]);   //adds hex string into bin string
-	}	
+			
 	return bin;
 }
 
@@ -767,7 +767,6 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 			outFile << "Line " << line[i] << ": Word " << i << ": Code = " << hex41 << endl;
 		}
 
-
 		i--;
 
 	} while (i >= 0);
@@ -776,7 +775,6 @@ void getWord2(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 int readBinary(string binaryNum)
 {
 	long dec = 0;
-
 	int x = 0;
 	int base = pow(2, binaryNum.length() - 1);
 
@@ -819,21 +817,15 @@ double converTime(string time)
         
 	//converts nanoseconds to microseconds
 	if (nanoFlag)
-	{
 		finalTime = theTime * 0.001;
-	}
 
         //keep number as microseconds
 	if (microFlag)
-	{
 		finalTime = theTime;
-	}
 
         //converts milliseconds to microseconds
 	if (milliFlag)
-	{
 		finalTime = theTime * 1000;
-	}
 
 	return finalTime;   //returns the final time that it took to complete action
 }
