@@ -102,7 +102,7 @@ int main()
 	return 0;
 }
 
-
+//Write all the command line to file
 void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vData, vector<string> vCycle, vector<string> vRelTime, vector<string> vSize)
 {
 	string firstNum = "40000810";
@@ -121,7 +121,7 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 	double tWDS = 0.0;
 	double totaltimeWDS = 0.0;
 	double totalbitsWDS = 0.0;
-
+	//run through vector from first data line address to last line
 	for (unsigned i = 1; i < vAddress.size(); ++i)
 	{
 		str1 = vAddress[i];
@@ -132,12 +132,13 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 			calData = calculateData(con);
 
 			int word = calData;
-			
+			if(word >= 0 && word <= 84)
+			{			
 				if (word == 0)
-				{
+				{	
 					if (str1.compare(firstNum) == 0)
 					{
-
+						//output the line has 0 word and it is the Write S-to-D command
 						if (vCycle[i] == "Wr")
 						{
 							double tempTime1 = 0.0;
@@ -194,7 +195,6 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 				else
 				{
 					word = calData / 2;
-
 					if (str1.compare(firstNum) == 0)
 					{
 						if (vCycle[i] == "Wr")
@@ -210,7 +210,6 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 						    	}
 						    	totaltimeWSD += tempTime5;
                             			    	totalbitsWSD += dataSize5;
-
 							outFile << "Line " << std::dec << i + 1 << ": " << "Write S-to-D command: " << word << " words" << endl;
 						}
 						else
@@ -221,7 +220,6 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 							for(unsigned int j = i; j < i + word/2 + 1; ++j)
 							    {
 								tempTime6 += converTime(vRelTime[j + 1]);
-								
 								sizeTemp6 = vSize[j].substr(1, 2);
 								dataSize6 += atof(sizeTemp6.c_str());
 							    }
@@ -241,19 +239,15 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 						    for(unsigned int j = i; j < i + word/2 + 1; ++j)
 						    {
 							tempTime7 += converTime(vRelTime[j + 1]);
-						    
 							sizeTemp7 = vSize[j].substr(1, 2);
 							dataSize7 += atof(sizeTemp7.c_str());
-							
 						    }
 						    totaltimeWDS += tempTime7;
 						    totalbitsWDS +=dataSize7;
-
-							outFile << "Line " << std::dec << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
+						outFile << "Line " << std::dec << i + 1 << ": " << "Write D-to-S command: " << word << " words" << endl;
 						}
 
 						else
-
 						{		
 						    double tempTime8 = 0.0;
 						    string sizeTemp8;
@@ -261,17 +255,14 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 						    for(unsigned int j = i; j < i + word/2 + 1; ++j)
 						    {
 							tempTime8 += converTime(vRelTime[j + 1]);
-						    
 							sizeTemp8 = vSize[j].substr(1, 2);
 							dataSize8 += atof(sizeTemp8.c_str());
-						    
 						    }
 						    totaltimeRDS += tempTime8;
 						    totalbitsRDS +=dataSize8;
 							outFile << "Line " << std::dec << i + 1 << ": " << "Read D-to-S command: " << word << " words" << endl;
 						}
 					}
-
 					string part1;
 					string part2;
 					string binPart1;
@@ -281,59 +272,59 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 
 					start = calculateData(vAddress[i + 1]);
 					end = calculateData(vAddress[i + word / 2]);
-
-					vector<int> line1;
-
+					//compare the start and end of address has the total word
 					if (end > start)
 					{
 						vector<string> defaultWord1;
-
+						vector<int> line1;
+						//low-to-high word ordering
 						for (unsigned int j = i + 1; j < i + word / 2 + 1; ++j)
 						{
+							//get the first part and second part of each word's data
 							part1 = vData[j].substr(0, 4);
 							part2 = vData[j].substr(4, 4);
-
 							binPart1 = hex_str_to_bin_str(part1);
 							binPart2 = hex_str_to_bin_str(part2);
-
 							defaultWord1.push_back(binPart1);
-
-
 							line1.push_back(j + 1);
 							defaultWord1.push_back(binPart2);
 							line1.push_back(j + 1);
 						}
-
 						getWord1(defaultWord1, line1, outFile);
+						defaultWord1.clear();
+						line1.clear();	
 					}
-
 						else
 						{
 							vector<string> defaultWord2;
-							int k = i + 1;
-
+							vector<int> line2;
+							//high to low word ordering
 							for (unsigned int j = i + word / 2; j >= i + 1; j--)
 						{
-							++k;
+							//get the first part and second part of each word's data
 							part1 = vData[j].substr(0, 4);
 							part2 = vData[j].substr(4, 4);
-
 							binPart1 = hex_str_to_bin_str(part1);
 							binPart2 = hex_str_to_bin_str(part2);
-
 							defaultWord2.push_back(binPart1);
-
-							line1.push_back(j + 1);
+							line2.push_back(j + 1);
 							defaultWord2.push_back(binPart2);
-							line1.push_back(j + 1);
+							line2.push_back(j + 1);
 						}
-
-						getWord2(defaultWord2, line1, outFile);
+						getWord2(defaultWord2, line2, outFile);
+						defaultWord2.clear();
+						line2.clear();
 						}
 				}
+				}
+				else
+					{
+					outFile << "Invalid word" << endl;
+					}
 				outFile << endl;
 			}
 	}
+//calculate the data rate 
 	outFile.precision(2);
     tRSD = totalbitsRSD/totaltimeRSD;
     tRDS = totalbitsRDS/totaltimeRDS;
@@ -346,6 +337,7 @@ void outputToFile(ofstream &outFile, vector<string> vAddress, vector<string> vDa
 
 }
 
+//get the number of bytes from the data
 int calculateData(string data)
 {
 	stringstream stringData;    //creates a stream for the data being passed
@@ -401,7 +393,8 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 	while (i < defaultWord.size())
 	{
 		if (i == 0)
-		{
+		{	
+			//get the bits 14-13
 			string word0 = defaultWord[i].substr(1, 2);    
 			int hex0 = readBinary(word0);                    
 
@@ -423,6 +416,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
 		//if word size is 1, grabs appropriate substring and outputs to outFile
 		else if (i == 1)
 		{
+			//get the bits 15-13
 			string word1 = defaultWord[i].substr(0, 3);  
 			int hex1 = readBinary(word1);                   
 
@@ -444,6 +438,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
                 //if word size is 4, grabs appropriate substring and outputs to outFile
 		else if (i == 4)
 		{
+			//get the bit 0
 			string word4 = defaultWord[i].substr(15, 1);   
 			int hex4 = readBinary(word4);                 
 
@@ -462,6 +457,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
                 //if word size is 5, grabs appropriate substring and outputs to outFile
 		else if (i == 5)
 		{
+			//get the bits 6-0
 			string word5 = defaultWord[i].substr(9, 7);
 			int hex5 = readBinary(word5);
 
@@ -471,6 +467,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
                 //if word size is 10, grabs appropriate substring and outputs to outFile
 		else if (i == 10)
 		{
+			//get the bits 15-11
 			string word10 = defaultWord[i].substr(0, 5);
 			int hex10 = readBinary(word10);
 
@@ -480,6 +477,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
                 //if word size is 15, grabs appropriate substring and outputs to outFile
 		else if (i == 15)
 		{
+			//get bit 2
 			string word15 = defaultWord[i].substr(13, 1);
 			int hex15 = readBinary(word15);
 
@@ -498,6 +496,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
                 //if word size is 22, grabs appropriate substring and outputs to outFile
 		else if (i == 22)
 		{
+			//get bit 3
 			string word22 = defaultWord[i].substr(12, 1);
 			int hex22 = readBinary(word22);
 
@@ -516,6 +515,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
                 //if size is 32, grabs appropriate substring and outputs to outFile
 		else if (i == 32)
 		{
+			//get bits 14-0
 			string word32 = defaultWord[i].substr(1, 15);
 			int hex32 = readBinary(word32);
 
@@ -525,6 +525,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
                 //if word size is 37, grabs appropriate substring and outputs to outFile
 		else if (i == 37)
 		{
+			//get bit 15
 			string word37 = defaultWord[i].substr(0, 1);
 			int hex37 = readBinary(word37);
 
@@ -543,6 +544,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
                 //if word size is 38, grabs appropriate substring and outputs to outFile
 		else if (i == 38)
 		{
+			//get bit 14
 			string word38 = defaultWord[i].substr(1, 1);
 			int hex38 = readBinary(word38);
 
@@ -561,6 +563,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
                 //if word size is 40, grabs appropriate substring and outputs to outFile
 		else if (i == 40)
 		{
+			//get bit 7
 			string word40 = defaultWord[i].substr(8, 1);
 			int hex40 = readBinary(word40);
 
@@ -579,6 +582,7 @@ void getWord1(vector<string> defaultWord, vector<int> line, ofstream &outFile)
                 //if word size is 41, grabs appropriate substring and outputs to outFile
 		else if (i == 41)
 		{
+			//get bit 14-8
 			string word41 = defaultWord[i].substr(1, 7);  
 			int hex41 = readBinary(word41);
 
